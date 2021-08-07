@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/core/repository/repository_provider.dart';
+import 'package:grocery_app/core/providers/repository_provider.dart';
 
 class CartProductCard extends StatelessWidget {
   final int qt;

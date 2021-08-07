@@ -4,7 +4,7 @@ import 'package:grocery_app/ui/pages/home/home_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'core/providers/profile_provider.dart';
-import 'core/repository/repository_provider.dart';
+import 'core/providers/repository_provider.dart';
 import 'ui/pages/auth/providers/auth_view_model_provider.dart';
 import 'ui/pages/welcome/welcome_page.dart';
 
@@ -28,7 +28,7 @@ class MyApp extends ConsumerWidget {
         ),
         buttonTheme: ButtonThemeData(
           textTheme: ButtonTextTheme.primary,
-        )
+        ),
       ),
       home: auth.user == null
           ? WelcomePage()

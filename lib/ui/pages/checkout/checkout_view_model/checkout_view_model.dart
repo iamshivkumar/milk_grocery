@@ -1,199 +1,141 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:grocery_app/core/models/order.dart';
+import 'package:grocery_app/core/models/order_product.dart';
+import 'package:grocery_app/core/models/order_status.dart';
 import 'package:grocery_app/core/models/profile.dart';
-import 'package:grocery_app/core/repository/repository.dart';
+import 'package:grocery_app/core/providers/profile_provider.dart';
+import 'package:grocery_app/core/providers/repository_provider.dart';
+
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CheckoutViewModel extends ChangeNotifier {
-  // final Profile profile;
-  // final Repository repository;
-  // final double deliveryCharge;
+  final ProviderReference ref;
 
-  // CheckoutViewModel({
-  //   required this.profile,
-  //   required this.repository,
-  //   required this.deliveryCharge,
-  // });
+  CheckoutViewModel(this.ref);
 
-  // int currentStep = 0;
+  Profile get profile => ref.read(profileProvider).data!.value;
+  Repository get repository => ref.read(repositoryProvider);
 
-  // void setStep(int value) {
-  //   currentStep = value;
-  //   notifyListeners();
-  // }
 
-  // void back() {
-  //   currentStep--;
-  //   notifyListeners();
-  // }
 
-  // void next() {
-  //   currentStep++;
-  //   notifyListeners();
-  // }
 
-  // DateTime? _date;
-  // DateTime? get date => _date;
-  // set date(DateTime? date) {
-  //   _date = date;
-  //   notifyListeners();
-  // }
 
-  // DeliveyBy? _deliveyBy;
-  // DeliveyBy? get deliveyBy => _deliveyBy;
-  // set deliveyBy(DeliveyBy? deliveyBy) {
-  //   _deliveyBy = deliveyBy;
-  //   notifyListeners();
-  // }
+  double walletAmount = 0;
 
-  // GeoPoint? _geoPoint;
-  // GeoPoint? get geoPoint => _geoPoint;
-  // set geoPoint(GeoPoint? geoPoint) {
-  //   _geoPoint = geoPoint;
-  //   notifyListeners();
-  // }
+  void useWallet(double total) {
+    final double amount = profile.walletAmount;
+    if (amount <= total) {
+      walletAmount = amount;
+    } else {
+      walletAmount = total;
+    }
+    notifyListeners();
+  }
 
-  // String? _paymentMethod;
-  // String? get paymentMethod => _paymentMethod;
-  // set paymentMethod(String? paymentMethod) {
-  //   _paymentMethod = paymentMethod;
-  //   notifyListeners();
-  // }
+  void cancelUsingWallet() {
+    walletAmount = 0;
+    notifyListeners();
+  }
 
-  // bool get ready => date != null && deliveyBy != null && geoPoint != null;
 
-  // double walletAmount = 0;
+  final _razorpay = Razorpay();
 
-  // void useWallet(double total) {
-  //   final double amount = profile.walletAmount;
-  //   if (amount <= total) {
-  //     walletAmount = amount;
-  //   } else {
-  //     walletAmount = total;
-  //   }
-  //   notifyListeners();
-  // }
+  void payOrder({
+    required List<OrderProduct> products,
+    required double price,
+    required int items,
+    required VoidCallback onOrder,
+  }) {
+    final double total = price  - walletAmount;
 
-  // void cancelUsingWallet() {
-  //   walletAmount = 0;
-  //   notifyListeners();
-  // }
+    if (total > 0) {
+      final options = {
+        'key': 'rzp_test_KmPzyFK6pErbkC',
+        'amount': (total * 100).toInt(),
+        'name': 'Grcoery',
+        'description': 'Pay For Checkout',
+        'prefill': {'contact': repository.user.phoneNumber}
+      };
 
-  // String _getCode(int length) {
-  //   String _chars = '1234567890';
-  //   Random _rnd = Random();
-  //   return String.fromCharCodes(
-  //     Iterable.generate(
-  //       length,
-  //       (_) => _chars.codeUnitAt(
-  //         _rnd.nextInt(_chars.length),
-  //       ),
-  //     ),
-  //   );
-  // }
+      _razorpay.open(options);
+      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+          (PaymentSuccessResponse res) {
+        print("Payment Success");
+        print(res.orderId);
+        _order(
+          products: products,
+          price: price,
+          total: total,
+          items: items,
+          paid: true,
+          onOrder: onOrder,
+          paymentId: res.paymentId,
+        );
+        _razorpay.clear();
+      });
+      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (res) {
+        _razorpay.clear();
+      });
+      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+          (ExternalWalletResponse res) {
+        print(res.walletName);
+        _razorpay.clear();
+      });
+    } else if (total == 0) {
+      _order(
+        products: products,
+        total: total,
+        price: price,
+        items: items,
+        paid: true,
+        onOrder: onOrder,
+      );
+    } else {
+      _order(
+        products: products,
+        total: total,
+        price: price,
+        items: items,
+        paid: false,
+        onOrder: onOrder,
+      );
+    }
+  }
 
-  // final _razorpay = Razorpay();
-
-  // void payOrder({
-  //   required List<OrderProduct> products,
-  //   required double total,
-  //   required int items,
-  //   required VoidCallback onOrder,
-  // }) {
-  //   final double totalPrice = total + deliveryCharge - walletAmount;
-
-  //   if (paymentMethod == 'Razorpay' && totalPrice > 0) {
-  //     final options = {
-  //       'key': 'rzp_test_KmPzyFK6pErbkC',
-  //       'amount': (totalPrice * 100).toInt(),
-  //       'name': 'Grcoery',
-  //       'description': 'Pay For Checkout',
-  //       'prefill': {'contact': repository.user.phoneNumber}
-  //     };
-
-  //     _razorpay.open(options);
-  //     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-  //         (PaymentSuccessResponse res) {
-  //       print("Payment Success");
-  //       print(res.orderId);
-  //       _order(
-  //         products: products,
-  //         total: total,
-  //         totalPrice: totalPrice,
-  //         items: items,
-  //         paid: true,
-  //         onOrder: onOrder,
-  //         paymentId: res.paymentId,
-  //       );
-  //       _razorpay.clear();
-  //     });
-  //     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (res) {
-  //       _razorpay.clear();
-  //     });
-  //     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
-  //         (ExternalWalletResponse res) {
-  //       print(res.walletName);
-  //       _razorpay.clear();
-  //     });
-  //   } else if (totalPrice == 0) {
-  //     _order(
-  //       products: products,
-  //       total: total,
-  //       totalPrice: totalPrice,
-  //       items: items,
-  //       paid: true,
-  //       onOrder: onOrder,
-  //     );
-  //   } else {
-  //     _order(
-  //       products: products,
-  //       total: total,
-  //       totalPrice: totalPrice,
-  //       items: items,
-  //       paid: false,
-  //       onOrder: onOrder,
-  //     );
-  //   }
-  // }
-
-  // void _order({
-  //   required List<OrderProduct> products,
-  //   required double total,
-  //   required double totalPrice,
-  //   required int items,
-  //   required bool paid,
-  //   required VoidCallback onOrder,
-  //   String? paymentId,
-  // }) async {
-  //   final Order order = Order(
-  //     id: '',
-  //     customerName: profile.name,
-  //     customerMobile: profile.mobile,
-  //     deliveryCharge: deliveryCharge,
-  //     price: total,
-  //     products: products,
-  //     code: _getCode(6),
-  //     total: totalPrice,
-  //     location: geoPoint!,
-  //     deliveryDate: date!,
-  //     deliveryBy: deliveyBy!,
-  //     status: OrderStatus.Ordered,
-  //     walletAmount: walletAmount,
-  //     paymentMethod: paymentMethod!,
-  //     paid: paid,
-  //     createdOn: DateTime.now(),
-  //     customerId: profile.id,
-  //     items: items,
-  //     paymentId: paymentId,
-  //   );
-  //   print("Order");
-  //   try {
-  //     await repository.order(order);
-  //     onOrder();
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  void _order({
+    required List<OrderProduct> products,
+    required double price,
+    required double total,
+    required int items,
+    required bool paid,
+    required VoidCallback onOrder,
+    String? paymentId,
+  }) async {
+    final Order order = Order(
+      id: '',
+      customerName: profile.name,
+      customerMobile: profile.mobile,
+      price: price,
+      products: products,
+      status: OrderStatus.pending,
+      walletAmount: walletAmount,
+      paid: paid,
+      createdOn: DateTime.now(),
+      customerId: profile.id,
+      items: items,
+      paymentId: paymentId,
+      total: total,
+      milkManId: profile.milkManId,
+      paymentMethod: "Razorpay"
+    );
+    try {
+      await repository.order(order);
+      onOrder();
+    } catch (e) {
+      print(e);
+    }
+  }
 }

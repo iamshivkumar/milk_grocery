@@ -10,6 +10,7 @@ class Profile {
   final String? number;
   final String? milkManId;
   final List<CartProduct> cartProducts;
+  final double walletAmount;
 
   Profile({
     required this.id,
@@ -19,6 +20,7 @@ class Profile {
     this.number,
     this.milkManId,
     required this.cartProducts,
+    required this.walletAmount,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class Profile {
       'number': number,
       'milkManId': milkManId,
       'cartProducts': cartProducts.map((x) => x.toMap()).toList(),
+      'walletAmount':walletAmount
     };
   }
 
@@ -43,6 +46,7 @@ class Profile {
     String? number,
     String? milkManId,
     List<CartProduct>? cartProducts,
+    double? walletAmount,
   }) {
     return Profile(
       id: this.id,
@@ -52,6 +56,7 @@ class Profile {
       area: area ?? this.area,
       number: number ?? this.number,
       cartProducts: cartProducts ?? this.cartProducts,
+      walletAmount: walletAmount??this.walletAmount,
     );
   }
 
@@ -74,6 +79,7 @@ class Profile {
       area: map['area'],
       number: map['number'],
       cartProducts: carts.map((e) => CartProduct.fromMap(e)).toList(),
+      walletAmount: map['walletAmount'],
     );
   }
 
@@ -82,6 +88,7 @@ class Profile {
         name: '',
         mobile: '',
         cartProducts: [],
+        walletAmount: 0,
       );
 
   bool isInCart(String id) =>

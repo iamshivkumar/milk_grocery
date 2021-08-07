@@ -30,7 +30,9 @@ class CartPage extends ConsumerWidget {
     final double total = products.isNotEmpty
         ? products
             .map(
-              (e) => e.options[profile.cartOptionIndex(e.id)].salePrice * profile.cartQuanity(e.id),
+              (e) =>
+                  e.options[profile.cartOptionIndex(e.id)].salePrice *
+                  profile.cartQuanity(e.id),
             )
             .reduce((value, element) => value + element)
         : 0;
@@ -53,25 +55,27 @@ class CartPage extends ConsumerWidget {
             ],
           ),
           trailing: MaterialButton(
-            onPressed: products.isNotEmpty? () async {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => CheckoutPage(
-              //       total: total,
-              //       items: items,
-              //       orderProducts: products
-              //           .map(
-              //             (e) => OrderProduct.fromProduct(
-              //               product: e,
-              //               cartProduct: profile.cartProduct(e.id)
-              //             ),
-              //           )
-              //           .toList(),
-              //     ),
-              //   ),
-              // );
-            }:null,
+            onPressed: products.isNotEmpty
+                ? () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutPage(
+                          total: total,
+                          items: items,
+                          orderProducts: products
+                              .map(
+                                (e) => OrderProduct.fromProduct(
+                                  product: e,
+                                  cartProduct: profile.cartProduct(e.id),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    );
+                  }
+                : null,
             color: Theme.of(context).accentColor,
             child: Text('CHECKOUT NOW'),
           ),

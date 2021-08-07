@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery_app/core/models/cart_product.dart';
 import 'package:grocery_app/core/models/category.dart';
+import 'package:grocery_app/core/models/order.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/models/profile.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final repositoryProvider = Provider<Repository>((ref) => Repository());
 
 class Repository {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -87,9 +91,32 @@ class Repository {
       },
     );
   }
-    Future<Product> readProduct(String id) async {
+
+  Future<Product> readProduct(String id) async {
     return _firestore.collection('products').doc(id).get().then(
           (value) => Product.fromFirestore(value),
         );
   }
+
+  Future<void> order(Order order) async {
+    final batch = _firestore.batch();
+    final ref = _firestore.collection('orders').doc();
+    batch.set(ref, order.toMap());
+    batch.update(_firestore.collection('users').doc(order.customerId), {
+      'cartProducts': [],
+    });
+    batch.commit();
+  }
+
+  Stream<List<Order>> get ordersStream => _firestore
+      .collection('orders')
+      .where('customerId', isEqualTo: user.uid)
+      .snapshots()
+      .map(
+        (event) => event.docs
+            .map(
+              (e) => Order.fromFirestore(e),
+            )
+            .toList(),
+      );
 }
