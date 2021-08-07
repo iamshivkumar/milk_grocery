@@ -22,7 +22,8 @@ class MyApp extends ConsumerWidget {
       title: 'Grocery',
       theme: ThemeData(
         primarySwatch: Colors.amber,
-        accentColor: Colors.indigo,
+        primaryColor: Color(0xFFfcbf49),
+        accentColor: Color(0xFF003049),
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(),
         ),

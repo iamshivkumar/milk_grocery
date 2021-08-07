@@ -100,9 +100,9 @@ class Profile {
   int cartOptionIndex(String id) =>
       cartProduct(id).optionIndex;
 
-  void addToCart(String id) {
+  void addToCart({required String id,int? index}) {
     cartProducts.add(
-      CartProduct(id: id, qt: 1, optionIndex: 0),
+      CartProduct(id: id, qt: 1, optionIndex: index??0),
     );
   }
 

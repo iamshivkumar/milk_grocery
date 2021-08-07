@@ -103,7 +103,7 @@ class ProductCard extends ConsumerWidget {
                     )
                   : TextButton(
                       onPressed: () async {
-                        profile.addToCart(product.id);
+                        profile.addToCart(id: product.id);
                         repository.saveCart(profile.cartProducts);
                       },
                       child: Icon(

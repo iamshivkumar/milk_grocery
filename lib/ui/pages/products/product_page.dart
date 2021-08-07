@@ -58,7 +58,7 @@ class ProductPage extends ConsumerWidget {
                 )
               : MaterialButton(
                   onPressed: () {
-                    profile.addToCart(product.id);
+                    profile.addToCart(id: product.id);
                     repository.saveCart(profile.cartProducts);
                   },
                   color: theme.accentColor,
@@ -102,12 +102,19 @@ class ProductPage extends ConsumerWidget {
                           child: SelectionTile(
                             value: value,
                             onTap: () {
-                              if (!value) {
+                              if (!profile.isInCart(product.id)) {
+                                profile.addToCart(
+                                  id: product.id,
+                                  index: product.options.indexOf(e),
+                                );
+                              } else if(!value){
                                 profile.updateIndex(
-                                    id: product.id,
-                                    index: product.options.indexOf(e));
-                                repository.saveCart(profile.cartProducts);
+                                  id: product.id,
+                                  index: product.options.indexOf(e),
+                                );
                               }
+
+                              repository.saveCart(profile.cartProducts);
                             },
                             title: Text(
                               e.salePriceLabel,
