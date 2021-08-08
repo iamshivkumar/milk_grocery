@@ -11,7 +11,7 @@ class CategoryCard extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CategoryProductsPage(category: category),
+          builder: (context) => CategoryProductsPage(category: category.name),
         ),
       ),
       child: Card(

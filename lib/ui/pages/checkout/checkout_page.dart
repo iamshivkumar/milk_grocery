@@ -1,7 +1,9 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/core/models/order_product.dart';
+import 'package:grocery_app/ui/pages/orders/orders_page.dart';
 import 'package:grocery_app/ui/widgets/tow_text_row.dart';
 
 import 'checkout_view_model/checkout_view_model_provider.dart';
@@ -27,12 +29,25 @@ class CheckoutPage extends ConsumerWidget {
         title: Text('Place Order'),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,vertical: 4
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: MaterialButton(
           color: theme.accentColor,
-          onPressed: () {},
+          onPressed: () {
+            model.payOrder(
+              products: orderProducts,
+              price: total,
+              items: items,
+              onOrder: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdersPage(),
+                  ),
+                );
+              },
+            );
+          },
           child: Text("PAY"),
         ),
       ),

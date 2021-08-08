@@ -30,6 +30,9 @@ class MyApp extends ConsumerWidget {
         buttonTheme: ButtonThemeData(
           textTheme: ButtonTextTheme.primary,
         ),
+        cardTheme: CardTheme(
+          clipBehavior: Clip.antiAlias,
+        )
       ),
       home: auth.user == null
           ? WelcomePage()

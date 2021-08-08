@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:grocery_app/ui/pages/home/providers/banners_provider.dart';
 import 'package:grocery_app/ui/pages/home/providers/categories_provider.dart';
 import 'package:grocery_app/ui/pages/home/providers/popular_products_provider.dart';
 import 'package:grocery_app/ui/pages/home/widgets/cart_icon.dart';
+import 'package:grocery_app/ui/pages/products/category_products_page.dart';
 import 'package:grocery_app/ui/pages/search/search_page.dart';
 import 'package:grocery_app/ui/widgets/product_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,6 +18,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final categoriesAsync = watch(categoriesProvider);
     final popularProductsAsync = watch(popularProductsProvider);
+    final bannersAsync = watch(bannersProvider);
     final theme = Theme.of(context);
     final style = theme.textTheme;
     return DrawerAnimation(
@@ -43,23 +46,41 @@ class HomePage extends ConsumerWidget {
         body: ListView(
           children: [
             SizedBox(height: 16),
-            CarouselSlider(
-              options: CarouselOptions(
-                aspectRatio: 5 / 2,
-                viewportFraction: 0.9,
+            bannersAsync.when(
+              data: (banners) => CarouselSlider(
+                options: CarouselOptions(
+                  autoPlay: true,
+                  autoPlayCurve: Curves.easeInOut,
+                  aspectRatio: 5 / 2,
+                  viewportFraction: 0.9,
+                ),
+                items: banners.map((i) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CategoryProductsPage(category: i.category),
+                        ),
+                      ),
+                      child: Card(
+                        child: Image.network(
+                          i.image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-              items: [1, 2, 3, 4, 5].map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(color: Colors.amber),
-                      child: SizedBox(),
-                    );
-                  },
-                );
-              }).toList(),
+              loading: () => Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (e, s) => Text(
+                e.toString(),
+              ),
             ),
             SizedBox(height: 16),
             Padding(
@@ -94,20 +115,23 @@ class HomePage extends ConsumerWidget {
               ),
             ),
             popularProductsAsync.when(
-                data: (products) => GridView.count(
-                      padding: EdgeInsets.all(12),
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      childAspectRatio: 2 / 3,
-                      children: products
-                          .map(
-                            (e) => ProductCard(product: e),
-                          )
-                          .toList(),
-                    ),
-                loading: () => Center(),
-                error: (e, s) => Text(e.toString())),
+              data: (products) => GridView.count(
+                padding: EdgeInsets.all(12),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                childAspectRatio: 2 / 3,
+                children: products
+                    .map(
+                      (e) => ProductCard(product: e),
+                    )
+                    .toList(),
+              ),
+              loading: () => Center(),
+              error: (e, s) => Text(
+                e.toString(),
+              ),
+            ),
           ],
         ),
       ),

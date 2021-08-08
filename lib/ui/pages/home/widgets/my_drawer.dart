@@ -87,7 +87,7 @@ class MyDrawer extends StatelessWidget {
                   // );
                 },
                 leading: Icon(Icons.location_pin),
-                title: Text("My Delivery Address"),
+                title: Text("My Address"),
               ),
               ListTile(
                 onTap: () {

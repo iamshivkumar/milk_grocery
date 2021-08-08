@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/providers/profile_provider.dart';
 import 'package:grocery_app/core/providers/repository_provider.dart';
-import 'package:grocery_app/ui/pages/subscribe/subscribe_page.dart';
 import 'package:grocery_app/ui/widgets/selection_tile.dart';
 import 'package:grocery_app/utils/labels.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

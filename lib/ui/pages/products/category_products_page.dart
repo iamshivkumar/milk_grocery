@@ -6,15 +6,15 @@ import 'package:grocery_app/ui/widgets/product_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CategoryProductsPage extends ConsumerWidget {
-  final ProductCategory category;
+  final String category;
   const CategoryProductsPage({Key? key, required this.category})
       : super(key: key);
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final model = watch(productsViewModelProvider(category.name));
+    final model = watch(productsViewModelProvider(category));
     return Scaffold(
       appBar: AppBar(
-        title: Text(category.name),
+        title: Text(category),
       ),
       body: model.products.isEmpty
           ? Loading()
@@ -29,7 +29,7 @@ class CategoryProductsPage extends ConsumerWidget {
               },
               child: RefreshIndicator(
                 onRefresh: () async =>
-                    context.refresh(productsViewModelProvider(category.name)),
+                    context.refresh(productsViewModelProvider(category)),
                 child: CustomScrollView(
                   slivers: [
                     SliverPadding(

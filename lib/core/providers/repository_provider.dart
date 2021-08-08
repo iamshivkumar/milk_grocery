@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:grocery_app/core/models/banner.dart';
 import 'package:grocery_app/core/models/cart_product.dart';
 import 'package:grocery_app/core/models/category.dart';
 import 'package:grocery_app/core/models/order.dart';
@@ -119,4 +120,11 @@ class Repository {
             )
             .toList(),
       );
+
+  Future<List<BannerModel>> get futureBanners {
+    return _firestore.collection('banners').doc('banners').get().then((value) {
+      final Iterable list = value.data()!['banners'];
+      return list.map((e) => BannerModel.fromMap(e)).toList();
+    });
+  }
 }
