@@ -1,0 +1,125 @@
+import 'package:flutter/material.dart';
+import 'package:grocery_app/core/models/subscription.dart';
+import 'package:grocery_app/utils/labels.dart';
+
+class DeliveryScheduleCard extends StatelessWidget {
+  final Subscription subscription;
+  final DateTime dateTime;
+
+  const DeliveryScheduleCard(
+      {Key? key, required this.subscription, required this.dateTime})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
+    final delivery = subscription.deliveries
+        .where((element) => element.date == dateTime)
+        .first;
+    return AspectRatio(
+      aspectRatio: 3,
+      child: Card(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Image.network(subscription.image),
+              ),
+            ),
+            Expanded(
+              flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, left: 8, right: 8, bottom: 4),
+                    child: Text(
+                      subscription.productName,
+                      style: style.subtitle1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 4, left: 8, right: 8, bottom: 8),
+                    child: Text(
+                      subscription.option.amountLabel,
+                      style: style.caption,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      subscription.option.priceLabel,
+                      style: style.subtitle1!.copyWith(
+                        color: theme.primaryColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    delivery.status,
+                    style: style.overline!.copyWith(
+                      color: theme.primaryColor,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        splashRadius: 24,
+                        color: theme.accentColor,
+                        splashColor: theme.accentColor.withOpacity(0.2),
+                        highlightColor: Colors.transparent,
+                        icon: Icon(Icons.remove_circle_outline),
+                        onPressed: () {},
+                      ),
+                      Text(
+                        delivery.quantity.toString(),
+                        style: style.headline6,
+                      ),
+                      IconButton(
+                        splashRadius: 24,
+                        color: theme.accentColor,
+                        splashColor: theme.accentColor.withOpacity(0.2),
+                        highlightColor: Colors.transparent,
+                        icon: Icon(Icons.add_circle_outline),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      text: "Total: ",
+                      style: style.caption,
+                      children: [
+                        TextSpan(
+                          text: Labels.rupee +
+                              (delivery.quantity *
+                                      subscription.option.salePrice)
+                                  .toInt()
+                                  .toString(),
+                          style: style.subtitle1,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

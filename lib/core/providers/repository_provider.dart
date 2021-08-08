@@ -6,6 +6,8 @@ import 'package:grocery_app/core/models/category.dart';
 import 'package:grocery_app/core/models/order.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/models/profile.dart';
+import 'package:grocery_app/core/models/subscription.dart';
+import 'package:grocery_app/utils/dates.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final repositoryProvider = Provider<Repository>((ref) => Repository());
@@ -127,4 +129,26 @@ class Repository {
       return list.map((e) => BannerModel.fromMap(e)).toList();
     });
   }
+
+  Future<void> subscribe(Subscription subscription) async {
+    await _firestore.collection('subscription').add(subscription.toMap());
+  }
+
+  Stream<List<Subscription>> get subscriptionsStream => _firestore
+      .collection('subscription')
+      .where('customerId', isEqualTo: user.uid)
+      .where(
+        'startDate',
+        isGreaterThanOrEqualTo: Dates.today.subtract(
+          Duration(days: 30),
+        ),
+      )
+      .snapshots()
+      .map(
+        (event) => event.docs
+            .map(
+              (e) => Subscription.fromFirestore(e),
+            )
+            .toList(),
+      );
 }

@@ -10,8 +10,6 @@ class Utils {
     'Snacks'
   ];
 
-
-
   static DateTime now = DateTime.now();
   static DateTime today = DateTime(now.year, now.month, now.day);
 
@@ -38,5 +36,10 @@ class Utils {
     }
   }
 
-  static String formatedDate(DateTime dateTime)=>DateFormat(DateFormat.MONTH_DAY).format(dateTime);
+  static String weekD(DateTime dateTime) {
+    return DateFormat(DateFormat.WEEKDAY).format(dateTime).split('').first;
+  }
+
+  static String formatedDate(DateTime dateTime) =>
+      DateFormat(DateFormat.MONTH_DAY).format(dateTime);
 }

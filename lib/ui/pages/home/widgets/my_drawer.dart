@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/core/providers/profile_provider.dart';
 import 'package:grocery_app/ui/pages/auth/providers/auth_view_model_provider.dart';
+import 'package:grocery_app/ui/pages/subscriptions/delivery_schedule_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../orders/orders_page.dart';
 
@@ -18,7 +19,7 @@ class MyDrawer extends StatelessWidget {
     );
     final authModel = context.read(authViewModelProvider);
     final profileAsync = context.read(profileProvider);
-    
+
     return Material(
       color: theme.accentColor,
       child: SafeArea(
@@ -62,6 +63,19 @@ class MyDrawer extends StatelessWidget {
                 },
                 leading: Icon(Icons.person_outline),
                 title: Text("My Profile"),
+              ),
+              ListTile(
+                onTap: () {
+                  close();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DeliverySchedulesPage(),
+                    ),
+                  );
+                },
+                leading: Icon(Icons.schedule),
+                title: Text("Delivery Schedule"),
               ),
               ListTile(
                 onTap: () {

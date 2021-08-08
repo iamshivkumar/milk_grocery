@@ -1,28 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grocery_app/core/models/delivery.dart';
 import 'package:grocery_app/core/models/option.dart';
+import 'package:grocery_app/utils/labels.dart';
 
-class Subscrption {
+class Subscription {
   final String id;
   final String customerId;
+  final String customerName;
+  final String customerMobile;
+
   final String productId;
   final String productName;
+  final String image;
   final Option option;
   final DateTime startDate;
   final DateTime endDate;
   final String deliveryDay;
+  final String milkManId;
+  // final List<DateTime> dates;
+  final List<Delivery> deliveries;
 
-  Subscrption({
+  Subscription({
     required this.id,
     required this.customerId,
+    required this.customerName,
+    required this.customerMobile,
     required this.productId,
     required this.productName,
     required this.option,
     required this.startDate,
     required this.endDate,
     required this.deliveryDay,
+    // required this.dates,
+    required this.deliveries,
+    required this.milkManId,
+    required this.image,
   });
 
-  Subscrption copyWith({
+  Subscription copyWith({
     String? customerId,
     String? productId,
     String? productName,
@@ -30,8 +45,14 @@ class Subscrption {
     DateTime? startDate,
     DateTime? endDate,
     String? deliveryDay,
+    String? milkManId,
+    List<DateTime>? dates,
+    List<Delivery>? deliveries,
+    String? customerName,
+    String? customerMobile,
+    String? image,
   }) {
-    return Subscrption(
+    return Subscription(
       id: this.id,
       customerId: customerId ?? this.customerId,
       productId: productId ?? this.productId,
@@ -40,24 +61,39 @@ class Subscrption {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       deliveryDay: deliveryDay ?? this.deliveryDay,
+      // dates: dates ?? this.dates,
+      deliveries: deliveries ?? this.deliveries,
+      milkManId: milkManId ?? this.milkManId,
+      customerName: customerName ?? this.customerName,
+      customerMobile: customerMobile ?? this.customerMobile,
+      image: image ?? this.image,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'customerId': customerId,
+      'customerName': customerName,
+      'customerMobile': customerMobile,
       'productId': productId,
       'productName': productName,
       'option': option.toMap(),
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
       'deliveryDay': deliveryDay,
+      // 'dates': dates.map((e) => Timestamp.fromDate(e)).toList(),
+      'deliveries': deliveries.map((e) => e.toMap()).toList(),
+      'image': image,
+      'milkManId': milkManId
     };
   }
 
-  factory Subscrption.fromMap(DocumentSnapshot doc) {
-   final Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
-    return Subscrption(
+  factory Subscription.fromFirestore(DocumentSnapshot doc) {
+    final Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
+    final Iterable deliveriesData = map['deliveries'];
+    return Subscription(
+      customerName: map['customerName'],
+      customerMobile: map['customerMobile'],
       id: doc.id,
       customerId: map['customerId'],
       productId: map['productId'],
@@ -66,8 +102,16 @@ class Subscrption {
       startDate: map['startDate'].toDate(),
       endDate: map['endDate'].toDate(),
       deliveryDay: map['deliveryDay'],
+      // dates: datesData.map((e) => e.toDate()).toList(),
+      deliveries: deliveriesData
+          .map((e) => Delivery.fromMap(e as Map<String, dynamic>))
+          .toList(),
+      milkManId: map['milkManId'],
+      image: map['image'],
     );
   }
+
+
 }
 
 class DeliveryDay {
@@ -82,4 +126,19 @@ class DeliveryDay {
     every3Day,
     every7Day
   ];
+
+  static int interval(String day) {
+    switch (day) {
+      case everyday:
+        return 1;
+      case alternateDay:
+        return 2;
+      case every3Day:
+        return 3;
+      case every7Day:
+        return 7;
+      default:
+        return 1;
+    }
+  }
 }

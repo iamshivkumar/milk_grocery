@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
         ),
         cardTheme: CardTheme(
           clipBehavior: Clip.antiAlias,
-        )
+        ),
       ),
       home: auth.user == null
           ? WelcomePage()

@@ -41,7 +41,3 @@ class Delivery {
 
 
 
-class Status {
-  static const String pending = 'Pending';
-  static const String delivered = 'Delivered';
-}
