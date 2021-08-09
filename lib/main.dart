@@ -19,6 +19,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final auth = watch(authViewModelProvider);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Grocery',
       theme: ThemeData(
         primarySwatch: Colors.amber,

@@ -3,8 +3,6 @@ import 'package:grocery_app/ui/pages/subscriptions/providers/schedule_view_model
 import 'package:grocery_app/ui/pages/subscriptions/providers/subscriptions_provider.dart';
 import 'package:grocery_app/ui/pages/subscriptions/widgets/delivery_schedule_card.dart';
 import 'package:grocery_app/ui/widgets/loading.dart';
-import 'package:grocery_app/utils/dates.dart';
-import 'package:grocery_app/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'widgets/My_calendar.dart';
 

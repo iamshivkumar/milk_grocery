@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/providers/profile_provider.dart';
 import 'package:grocery_app/core/providers/repository_provider.dart';
+import 'package:grocery_app/ui/pages/subscribe/subscribe_page.dart';
 import 'package:grocery_app/ui/widgets/selection_tile.dart';
 import 'package:grocery_app/utils/labels.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -55,13 +56,39 @@ class ProductPage extends ConsumerWidget {
                     ),
                   ],
                 )
-              : MaterialButton(
-                  onPressed: () {
-                    profile.addToCart(id: product.id);
-                    repository.saveCart(profile.cartProducts);
-                  },
-                  color: theme.accentColor,
-                  child: Text("ADD TO CART"),
+              : Row(
+                  children: [
+                    product.category == "Milky"
+                        ? Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          SubscribePage(product: product),
+                                    ),
+                                  );
+                                },
+                                color: theme.primaryColor,
+                                child: Text("SUBSCRIBE"),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          profile.addToCart(id: product.id);
+                          repository.saveCart(profile.cartProducts);
+                        },
+                        color: theme.accentColor,
+                        child: Text("ADD TO CART"),
+                      ),
+                    ),
+                  ],
                 ),
         ),
       ),
@@ -106,7 +133,7 @@ class ProductPage extends ConsumerWidget {
                                   id: product.id,
                                   index: product.options.indexOf(e),
                                 );
-                              } else if(!value){
+                              } else if (!value) {
                                 profile.updateIndex(
                                   id: product.id,
                                   index: product.options.indexOf(e),
