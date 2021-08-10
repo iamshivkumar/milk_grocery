@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery_app/core/models/banner.dart';
 import 'package:grocery_app/core/models/cart_product.dart';
 import 'package:grocery_app/core/models/category.dart';
+import 'package:grocery_app/core/models/delivery.dart';
 import 'package:grocery_app/core/models/order.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/models/profile.dart';
@@ -151,4 +152,30 @@ class Repository {
             )
             .toList(),
       );
+
+  Future<List<String>> getAreas(String mobile) async {
+    final data = await _firestore
+        .collection('milkMans')
+        .where('mobile', isEqualTo: mobile)
+        .get();
+    if (data.docs.isEmpty) {
+      return Future.error("Milk man not exists.");
+    } else {
+      return data.docs.first.data()['areas'].cast<String>();
+    }
+  }
+
+  void addAddress(Profile profile) {
+    _firestore
+        .collection('users')
+        .doc(profile.id)
+        .update(profile.toAddressMap());
+  }
+
+  void saveDeliveries(
+      {required String id, required List<Delivery> deliveries}) {
+    _firestore.collection('subscription').doc(id).update({
+      'deliveries': deliveries.map((e) => e.toMap()).toList(),
+    });
+  }
 }

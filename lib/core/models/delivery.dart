@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Delivery {
   final DateTime date;
-  final int quantity;
-  final String status;
+  int quantity;
+  String status;
   Delivery({
     required this.date,
     required this.quantity,

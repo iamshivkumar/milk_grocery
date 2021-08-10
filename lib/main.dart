@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/ui/pages/auth/add_area_page.dart';
 import 'package:grocery_app/ui/pages/home/home_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -42,7 +43,7 @@ class MyApp extends ConsumerWidget {
                 final profileAsync = watch(profileProvider);
                 final repository = context.read(repositoryProvider);
                 return profileAsync.when(
-                  data: (profile) => HomePage(),
+                  data: (profile) => profile.ready? HomePage():AreaPickPage(),
                   loading: () => Scaffold(
                     backgroundColor: Colors.amber,
                   ),

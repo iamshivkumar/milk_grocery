@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:grocery_app/utils/dates.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final scheduleViewModelProvider = ChangeNotifierProvider<ScheduleViewModel>((ref)=>ScheduleViewModel());
+final scheduleViewModelProvider =
+    ChangeNotifierProvider<ScheduleViewModel>((ref) => ScheduleViewModel());
 
-
-class ScheduleViewModel extends ChangeNotifier{
+class ScheduleViewModel extends ChangeNotifier {
   DateTime _selectedDate = Dates.today;
   DateTime get selectedDate => _selectedDate;
   set selectedDate(DateTime selectedDate) {
@@ -20,5 +20,7 @@ class ScheduleViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-
+  bool get editable => Dates.now.isBefore(
+        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day, 5),
+      );
 }

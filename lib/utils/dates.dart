@@ -1,4 +1,4 @@
 class Dates {
-  static DateTime get _now => DateTime.now();
-  static DateTime get today => DateTime(_now.year,_now.month,_now.day);
+  static DateTime get now => DateTime.now();
+  static DateTime get today => DateTime(now.year,now.month,now.day);
 }

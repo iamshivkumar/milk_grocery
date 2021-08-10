@@ -3,6 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:grocery_app/core/models/product.dart';
 import 'package:grocery_app/core/models/subscription.dart';
 import 'package:grocery_app/ui/pages/subscribe/providers/subscribe_view_model_provider.dart';
+import 'package:grocery_app/ui/pages/subscribe/widgets/schedule_preview.dart';
+import 'package:grocery_app/ui/pages/subscriptions/delivery_schedule_page.dart';
 import 'package:grocery_app/ui/widgets/loading.dart';
 import 'package:grocery_app/ui/widgets/selection_tile.dart';
 import 'package:grocery_app/utils/labels.dart';
@@ -26,15 +28,26 @@ class SubscribePage extends HookWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: model.loading?Loading(): MaterialButton(
-          color: theme.accentColor,
-          onPressed: model.ready? () {
-            model.subscribe(product: product,onSubscribe: (){
-              Navigator.pop(context);
-            });
-          }:null,
-          child: Text("CONFIRM"),
-        ),
+        child: model.loading
+            ? Loading()
+            : MaterialButton(
+                color: theme.accentColor,
+                onPressed: model.ready
+                    ? () {
+                        model.subscribe(
+                            product: product,
+                            onSubscribe: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DeliverySchedulesPage(),
+                                ),
+                              );
+                            });
+                      }
+                    : null,
+                child: Text("CONFIRM"),
+              ),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
@@ -184,15 +197,7 @@ class SubscribePage extends HookWidget {
                   .toList(),
             ),
           ),
-          // SfDateRangePicker(
-          //   minDate: DateTime.now(),
-          //   maxDate: DateTime.now(),
-          //   initialSelectedDates: [
-          //     DateTime.now(),
-          //     DateTime.now().add(Duration(days: 2)),
-          //     DateTime.now().add(Duration(days: 3)),
-          //   ],
-          // ),
+          SchedulePreview(dates: model.dates)
         ],
       ),
     );

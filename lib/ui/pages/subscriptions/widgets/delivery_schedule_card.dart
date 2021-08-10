@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/core/models/order_status.dart';
 import 'package:grocery_app/core/models/subscription.dart';
+import 'package:grocery_app/core/providers/repository_provider.dart';
+import 'package:grocery_app/ui/pages/subscriptions/providers/schedule_view_model_provider.dart';
 import 'package:grocery_app/utils/labels.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DeliveryScheduleCard extends StatelessWidget {
   final Subscription subscription;
@@ -16,6 +20,21 @@ class DeliveryScheduleCard extends StatelessWidget {
     final delivery = subscription.deliveries
         .where((element) => element.date == dateTime)
         .first;
+    final model = context.read(scheduleViewModelProvider);
+    final repo = context.read(repositoryProvider);
+    
+    Color color(){
+      switch (delivery.status) {
+        case OrderStatus.cancelled:
+          return Colors.red;
+        case OrderStatus.delivered:
+          return Colors.green;
+
+        default:
+           return theme.primaryColor;
+      }
+    }
+
     return AspectRatio(
       aspectRatio: 3,
       child: Card(
@@ -70,32 +89,55 @@ class DeliveryScheduleCard extends StatelessWidget {
                   Text(
                     delivery.status,
                     style: style.overline!.copyWith(
-                      color: theme.primaryColor,
+                      color: color(),
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      IconButton(
-                        splashRadius: 24,
-                        color: theme.accentColor,
-                        splashColor: theme.accentColor.withOpacity(0.2),
-                        highlightColor: Colors.transparent,
-                        icon: Icon(Icons.remove_circle_outline),
-                        onPressed: () {},
-                      ),
+                      model.editable
+                          ? IconButton(
+                              splashRadius: 24,
+                              color: theme.accentColor,
+                              splashColor: theme.accentColor.withOpacity(0.2),
+                              highlightColor: Colors.transparent,
+                              icon: Icon(Icons.remove_circle_outline),
+                              onPressed: delivery.quantity > 0
+                                  ? () {
+                                      if (delivery.quantity == 1) {
+                                        delivery.status = OrderStatus.cancelled;
+                                      }
+                                      delivery.quantity--;
+                                      repo.saveDeliveries(
+                                          id: subscription.id,
+                                          deliveries: subscription.deliveries);
+                                    }
+                                  : null,
+                            )
+                          : SizedBox(),
                       Text(
                         delivery.quantity.toString(),
                         style: style.headline6,
                       ),
-                      IconButton(
-                        splashRadius: 24,
-                        color: theme.accentColor,
-                        splashColor: theme.accentColor.withOpacity(0.2),
-                        highlightColor: Colors.transparent,
-                        icon: Icon(Icons.add_circle_outline),
-                        onPressed: () {},
-                      ),
+                      model.editable
+                          ? IconButton(
+                              splashRadius: 24,
+                              color: theme.accentColor,
+                              splashColor: theme.accentColor.withOpacity(0.2),
+                              highlightColor: Colors.transparent,
+                              icon: Icon(Icons.add_circle_outline),
+                              onPressed: () {
+                                if (delivery.quantity == 0) {
+                                  delivery.status = OrderStatus.pending;
+                                }
+                                delivery.quantity++;
+                                repo.saveDeliveries(
+                                  id: subscription.id,
+                                  deliveries: subscription.deliveries,
+                                );
+                              },
+                            )
+                          : SizedBox(),
                     ],
                   ),
                   RichText(

@@ -65,7 +65,7 @@ class SubscribeViewModel extends ChangeNotifier {
 
   void subscribe(
       {required Product product, required VoidCallback onSubscribe}) async {
-        loading = true;
+    loading = true;
     final subscription = Subscription(
       id: '',
       customerId: _profile.id,
@@ -84,12 +84,29 @@ class SubscribeViewModel extends ChangeNotifier {
     );
 
     try {
-     await _repository.subscribe(subscription);
-     onSubscribe();
-    } catch (e) {
-    }    
+      await _repository.subscribe(subscription);
+      onSubscribe();
+    } catch (e) {}
 
     loading = false;
+  }
+
+  List<DateTime> get dates {
+    if (startDate == null || deliveryDay == null) {
+      return [];
+    } else {
+      final List<DateTime> dates = [];
+      var start = startDate!;
+      while (start.isBefore(_endDate)) {
+        dates.add(start);
+        start = start.add(
+          Duration(
+            days: DeliveryDay.interval(deliveryDay!),
+          ),
+        );
+      }
+      return dates;
+    }
   }
 
   List<Delivery> _generateDeliveries() {
