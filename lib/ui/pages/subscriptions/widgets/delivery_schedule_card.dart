@@ -158,7 +158,7 @@ class DeliveryScheduleCard extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

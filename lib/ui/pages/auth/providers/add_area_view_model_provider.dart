@@ -60,6 +60,16 @@ class AddAreaViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _forEdit = false;
+
+  void initializeForEdit(Profile profile) {
+    _mobile = profile.milkManId!;
+    _number = profile.number!;
+    _landmark = profile.landMark!;
+    _area = profile.area!;
+    _forEdit = true;
+  }
+
   List<String> _areas = [];
   List<String> get areas => _areas;
   set areas(List<String> areas) {
@@ -76,7 +86,7 @@ class AddAreaViewModel extends ChangeNotifier {
     }
   }
 
-  void addAddress(){
+  void addAddress({required VoidCallback afterEdit}) {
     try {
       _repository.addAddress(_profile.copyWith(
         area: area,
@@ -84,7 +94,9 @@ class AddAreaViewModel extends ChangeNotifier {
         landMark: landmark,
         milkManId: _mobile,
       ));
-    } catch (e) {
-    }
+      if(_forEdit=true){
+        afterEdit();
+      }
+    } catch (e) {}
   }
 }

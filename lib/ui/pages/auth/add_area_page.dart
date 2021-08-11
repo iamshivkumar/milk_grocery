@@ -44,7 +44,11 @@ class AreaPickPage extends ConsumerWidget {
         ),
         onStepContinue: () {
           if (model.currentStep == 2) {
-            model.addAddress();
+            model.addAddress(
+              afterEdit: (){
+                Navigator.pop(context);
+              }
+            );
           } else if (model.currentStep == 0) {
             model.getMilkMan(onError: (v) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +76,8 @@ class AreaPickPage extends ConsumerWidget {
             content: Column(
               children: [
                 SizedBox(height: 8),
-                TextField(
+                TextFormField(
+                  initialValue: model.mobile,
                   keyboardType: TextInputType.number,
                   maxLength: 10,
                   decoration: InputDecoration(
@@ -122,7 +127,8 @@ class AreaPickPage extends ConsumerWidget {
             content: Column(
               children: [
                 SizedBox(height: 8),
-                TextField(
+                TextFormField(
+                  initialValue: model.number,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: "House /Flat/ Block No",
@@ -130,7 +136,8 @@ class AreaPickPage extends ConsumerWidget {
                   onChanged: (v) => model.number = v,
                 ),
                 SizedBox(height: 8),
-                TextField(
+                TextFormField(
+                  initialValue: model.landmark,
                   textCapitalization: TextCapitalization.words,
                   decoration: InputDecoration(
                     labelText: "Landmark",

@@ -23,6 +23,8 @@ class Order {
   final String? paymentId;
   final DateTime createdOn;
 
+  DateTime get deliveryDate => createdOn.add(Duration(days: 1));
+
   Order({
     required this.id,
     required this.customerId,

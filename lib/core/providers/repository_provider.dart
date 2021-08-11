@@ -178,4 +178,10 @@ class Repository {
       'deliveries': deliveries.map((e) => e.toMap()).toList(),
     });
   }
+
+  void addWalletAmount({ required double amount}) {
+    _firestore.collection('users').doc(user.uid).update({
+      'walletAmount': FieldValue.increment(amount),
+    });
+  }
 }

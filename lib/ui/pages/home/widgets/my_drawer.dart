@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/core/providers/profile_provider.dart';
+import 'package:grocery_app/ui/pages/address/address_page.dart';
 import 'package:grocery_app/ui/pages/auth/providers/auth_view_model_provider.dart';
+import 'package:grocery_app/ui/pages/profile/profile_page.dart';
 import 'package:grocery_app/ui/pages/subscriptions/delivery_schedule_page.dart';
+import 'package:grocery_app/ui/pages/subscriptions/my_subscriptions_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../orders/orders_page.dart';
 
@@ -54,12 +57,12 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   close();
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ProfilePage(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(),
+                    ),
+                  );
                 },
                 leading: Icon(Icons.person_outline),
                 title: Text("My Profile"),
@@ -83,6 +86,19 @@ class MyDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
+                      builder: (context) => SubscriptionsPage(),
+                    ),
+                  );
+                },
+                leading: Icon(Icons.calendar_view_month),
+                title: Text("My Subscriptions"),
+              ),
+              ListTile(
+                onTap: () {
+                  close();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
                       builder: (context) => OrdersPage(),
                     ),
                   );
@@ -93,12 +109,12 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   close();
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => LocationsPage(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddressPage(),
+                    ),
+                  );
                 },
                 leading: Icon(Icons.location_pin),
                 title: Text("My Address"),

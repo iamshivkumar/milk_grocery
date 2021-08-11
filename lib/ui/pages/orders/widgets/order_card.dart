@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/core/models/order.dart';
 import 'package:grocery_app/ui/widgets/tow_text_row.dart';
+import 'package:grocery_app/utils/utils.dart';
 
 import '../order_details_page.dart';
 
@@ -27,10 +28,10 @@ class OrderCard extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              // TwoTextRow(
-              //   text1: "Delivery Code: " + order.code,
-              //   text2: Utils.formatedDate(order.deliveryDate),
-              // ),
+              TwoTextRow(
+                text1: "Delivery Date",
+                text2: Utils.formatedDate(order.deliveryDate),
+              ),
               Divider(
                 height: 0.5,
               ),

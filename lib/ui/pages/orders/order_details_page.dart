@@ -84,13 +84,7 @@ class OrderDetailsPage extends StatelessWidget {
                 TwoTextRow(text1: "Status", text2: order.status),
                 TwoTextRow(
                   text1: "Delivery Date",
-                  text2: Utils.formatedDate(
-                    order.createdOn.add(
-                      Duration(
-                        days: 1,
-                      ),
-                    ),
-                  ),
+                  text2: Utils.formatedDate(order.deliveryDate),
                 ),
               ],
             ),
