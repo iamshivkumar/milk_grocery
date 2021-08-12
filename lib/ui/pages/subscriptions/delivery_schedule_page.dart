@@ -16,12 +16,12 @@ class DeliverySchedulesPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text("Delivery Schedule"),
       ),
-      body: subscriptionsStream.when(
-        data: (subscriptions) => Column(
-          children: [
-            MyCalendar(),
-            Expanded(
-              child: ListView(
+      body: Column(
+        children: [
+          MyCalendar(),
+          Expanded(
+            child: subscriptionsStream.when(
+              data: (subscriptions) => ListView(
                 children: subscriptions
                     .where(
                       (element) => element.deliveries
@@ -36,13 +36,13 @@ class DeliverySchedulesPage extends ConsumerWidget {
                     )
                     .toList(),
               ),
+              loading: () => Loading(),
+              error: (e, s) => Text(
+                e.toString(),
+              ),
             ),
-          ],
-        ),
-        loading: () => Loading(),
-        error: (e, s) => Text(
-          e.toString(),
-        ),
+          ),
+        ],
       ),
     );
   }

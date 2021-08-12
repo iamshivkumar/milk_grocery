@@ -102,12 +102,13 @@ class Repository {
         );
   }
 
-  Future<void> order(Order order) async {
+  Future<void> order({required Map<String,dynamic>map,required Order order}) async {
     final batch = _firestore.batch();
     final ref = _firestore.collection('orders').doc();
-    batch.set(ref, order.toMap());
+    batch.set(ref, order.toMap(map: map));
     batch.update(_firestore.collection('users').doc(order.customerId), {
       'cartProducts': [],
+      'walletAmount': FieldValue.increment(-order.walletAmount),
     });
     batch.commit();
   }

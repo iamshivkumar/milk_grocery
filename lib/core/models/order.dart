@@ -79,7 +79,7 @@ class Order {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({required Map<String,dynamic> map}) {
     return {
       'customerId': customerId,
       'customerName': customerName,
@@ -95,6 +95,7 @@ class Order {
       'paymentId': paymentId,
       'createdOn': Timestamp.fromDate(createdOn),
       'total': total,
+      'address':map,
     };
   }
 

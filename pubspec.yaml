@@ -15,8 +15,7 @@ dependencies:
   pinput: ^1.2.0
   carousel_slider: ^4.0.0
   table_calendar: ^3.0.1
-  syncfusion_flutter_calendar: ^19.2.51
-  syncfusion_flutter_datepicker: ^19.2.51
+
   #state management
   hooks_riverpod: ^0.14.0+4
   equatable: ^2.0.3

@@ -22,7 +22,7 @@ class Profile {
     this.milkManId,
     required this.cartProducts,
     required this.walletAmount,
-   this.landMark,
+    this.landMark,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,10 +33,12 @@ class Profile {
       'number': number,
       'milkManId': milkManId,
       'cartProducts': cartProducts.map((x) => x.toMap()).toList(),
-      'walletAmount':walletAmount,
-      'landMark':landMark,
+      'walletAmount': walletAmount,
+      'landMark': landMark,
     };
   }
+
+
 
   bool get ready => area != null && number != null && milkManId != null;
 
@@ -59,8 +61,8 @@ class Profile {
       area: area ?? this.area,
       number: number ?? this.number,
       cartProducts: cartProducts ?? this.cartProducts,
-      walletAmount: walletAmount??this.walletAmount,
-      landMark: landMark??this.landMark,
+      walletAmount: walletAmount ?? this.walletAmount,
+      landMark: landMark ?? this.landMark,
     );
   }
 
@@ -69,9 +71,18 @@ class Profile {
       'milkManId': milkManId,
       'area': area,
       'number': number,
-      'landMark':landMark,
+      'landMark': landMark,
     };
   }
+
+    Map<String, dynamic> toDeliveryAddressMap() {
+    return {
+      'area': area,
+      'number': number,
+      'landMark': landMark,
+    };
+  }
+
 
   factory Profile.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
@@ -95,25 +106,23 @@ class Profile {
         mobile: '',
         cartProducts: [],
         walletAmount: 0,
-
       );
 
   bool isInCart(String id) =>
       cartProducts.where((element) => element.id == id).isNotEmpty;
 
-  int cartQuanity(String id) =>
-      cartProduct(id).qt;
+  int cartQuanity(String id) => cartProduct(id).qt;
 
-  int cartOptionIndex(String id) =>
-      cartProduct(id).optionIndex;
+  int cartOptionIndex(String id) => cartProduct(id).optionIndex;
 
-  void addToCart({required String id,int? index}) {
+  void addToCart({required String id, int? index}) {
     cartProducts.add(
-      CartProduct(id: id, qt: 1, optionIndex: index??0),
+      CartProduct(id: id, qt: 1, optionIndex: index ?? 0),
     );
   }
 
-  CartProduct  cartProduct(String id) =>  cartProducts.where((element) => element.id == id).first;
+  CartProduct cartProduct(String id) =>
+      cartProducts.where((element) => element.id == id).first;
 
   void updateIndex({required String id, required int index}) {
     cartProducts.where((element) => element.id == id).first.optionIndex = index;

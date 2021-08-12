@@ -131,7 +131,7 @@ class CheckoutViewModel extends ChangeNotifier {
       paymentMethod: "Razorpay"
     );
     try {
-      await repository.order(order);
+      await repository.order(order: order,map: profile.toDeliveryAddressMap());
       onOrder();
     } catch (e) {
       print(e);
