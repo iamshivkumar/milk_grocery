@@ -132,8 +132,8 @@ class Repository {
     });
   }
 
-  Future<void> subscribe(Subscription subscription) async {
-    await _firestore.collection('subscription').add(subscription.toMap());
+  Future<void> subscribe({required Subscription subscription,required Map<String,dynamic>map}) async {
+    await _firestore.collection('subscription').add(subscription.toMap(map: map));
   }
 
   Stream<List<Subscription>> get subscriptionsStream => _firestore

@@ -17,7 +17,6 @@ class Subscription {
   final DateTime endDate;
   final String deliveryDay;
   final String milkManId;
-  // final List<DateTime> dates;
   final List<Delivery> deliveries;
 
   Subscription({
@@ -70,7 +69,7 @@ class Subscription {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({required Map<String,dynamic> map}) {
     return {
       'customerId': customerId,
       'customerName': customerName,
@@ -81,10 +80,10 @@ class Subscription {
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),
       'deliveryDay': deliveryDay,
-      // 'dates': dates.map((e) => Timestamp.fromDate(e)).toList(),
       'deliveries': deliveries.map((e) => e.toMap()).toList(),
       'image': image,
-      'milkManId': milkManId
+      'milkManId': milkManId,
+      'address':map,
     };
   }
 

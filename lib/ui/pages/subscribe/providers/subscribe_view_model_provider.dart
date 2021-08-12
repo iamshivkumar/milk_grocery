@@ -77,14 +77,16 @@ class SubscribeViewModel extends ChangeNotifier {
       startDate: startDate!,
       endDate: _endDate,
       deliveryDay: deliveryDay!,
-      // dates: dates,
       deliveries: _generateDeliveries(),
       milkManId: _profile.milkManId!,
       image: product.images.first,
     );
 
     try {
-      await _repository.subscribe(subscription);
+      await _repository.subscribe(
+        subscription: subscription,
+        map: _profile.toDeliveryAddressMap(),
+      );
       onSubscribe();
     } catch (e) {}
 
