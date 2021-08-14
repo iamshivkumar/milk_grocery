@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:grocery_app/core/models/banner.dart';
-import 'package:grocery_app/core/models/cart_product.dart';
-import 'package:grocery_app/core/models/category.dart';
-import 'package:grocery_app/core/models/delivery.dart';
-import 'package:grocery_app/core/models/order.dart';
-import 'package:grocery_app/core/models/product.dart';
-import 'package:grocery_app/core/models/profile.dart';
-import 'package:grocery_app/core/models/subscription.dart';
-import 'package:grocery_app/utils/dates.dart';
+import 'package:grocery_app/enums/order_status.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../utils/dates.dart';
+import '../models/banner.dart';
+import '../models/cart_product.dart';
+import '../models/category.dart';
+import '../models/delivery.dart';
+import '../models/order.dart';
+import '../models/product.dart';
+import '../models/profile.dart';
+import '../models/subscription.dart';
 
 final repositoryProvider = Provider<Repository>((ref) => Repository());
 
@@ -17,14 +19,6 @@ class Repository {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   User get user => _auth.currentUser!;
-
-  Future<void> createProfile() async {
-    final profile = Profile.empty().copyWith(
-      mobile: user.phoneNumber!,
-      name: user.displayName!,
-    );
-    _firestore.collection("users").doc(user.uid).set(profile.toMap());
-  }
 
   Stream<Profile> get profileStream =>
       _firestore.collection("users").doc(user.uid).snapshots().map(
@@ -37,7 +31,18 @@ class Repository {
         "name": name,
       },
     );
-    _auth.currentUser!.updateDisplayName(name);
+  }
+
+  void createUser(String name) {
+    _firestore.collection("users").doc(user.uid).set(
+          Profile(
+            id: '',
+            cartProducts: [],
+            mobile: user.phoneNumber!,
+            name: name,
+            walletAmount: 0,
+          ).toMap(),
+        );
   }
 
   void addDeliveryAddress(Profile profile) {
@@ -102,7 +107,8 @@ class Repository {
         );
   }
 
-  Future<void> order({required Map<String,dynamic>map,required Order order}) async {
+  Future<void> order(
+      {required Map<String, dynamic> map, required Order order}) async {
     final batch = _firestore.batch();
     final ref = _firestore.collection('orders').doc();
     batch.set(ref, order.toMap(map: map));
@@ -132,8 +138,12 @@ class Repository {
     });
   }
 
-  Future<void> subscribe({required Subscription subscription,required Map<String,dynamic>map}) async {
-    await _firestore.collection('subscription').add(subscription.toMap(map: map));
+  Future<void> subscribe(
+      {required Subscription subscription,
+      required Map<String, dynamic> map}) async {
+    await _firestore
+        .collection('subscription')
+        .add(subscription.toMap(map: map));
   }
 
   Stream<List<Subscription>> get subscriptionsStream => _firestore
@@ -153,6 +163,12 @@ class Repository {
             )
             .toList(),
       );
+
+  void updateSubScriptionStatus({required String status, required String id}) {
+    _firestore.collection('subscription').doc(id).update({
+      'status': status,
+    });
+  }
 
   Future<List<String>> getAreas(String mobile) async {
     final data = await _firestore
@@ -180,9 +196,20 @@ class Repository {
     });
   }
 
-  void addWalletAmount({ required double amount}) {
+  void addWalletAmount({required double amount}) {
     _firestore.collection('users').doc(user.uid).update({
       'walletAmount': FieldValue.increment(amount),
     });
+  }
+
+  void cancelOrder({required double price,required String orderId}){
+    final batch = _firestore.batch();
+    batch.update(_firestore.collection('orders').doc(orderId),{
+      'status': OrderStatus.cancelled,
+    });
+    batch.update(_firestore.collection('users').doc(user.uid), {
+      'walletAmount':FieldValue.increment(price),
+    });
+    batch.commit();
   }
 }

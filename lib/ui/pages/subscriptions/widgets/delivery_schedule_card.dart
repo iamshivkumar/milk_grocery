@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/models/order_status.dart';
-import 'package:grocery_app/core/models/subscription.dart';
-import 'package:grocery_app/core/providers/repository_provider.dart';
-import 'package:grocery_app/ui/pages/subscriptions/providers/schedule_view_model_provider.dart';
-import 'package:grocery_app/utils/labels.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/models/subscription.dart';
+import '../../../../core/providers/repository_provider.dart';
+import '../../../../enums/order_status.dart';
+import '../../../../utils/labels.dart';
+import '../providers/schedule_view_model_provider.dart';
 
 class DeliveryScheduleCard extends StatelessWidget {
   final Subscription subscription;

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/ui/pages/auth/widgets/update_display_name_sheet.dart';
-import 'package:grocery_app/ui/pages/profile/widgets/add_wallet_amount_sheet.dart';
+
+import '../../../core/providers/profile_provider.dart';
+import '../auth/widgets/update_display_name_sheet.dart';
+import 'widgets/add_wallet_amount_sheet.dart';
 
 class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final theme = Theme.of(context);
-    final style = theme.textTheme;
     var profile = watch(profileProvider).data!.value;
     return Scaffold(
       appBar: AppBar(

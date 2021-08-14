@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/models/category.dart';
-import 'package:grocery_app/ui/pages/products/providers/products_view_model_provider.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
-import 'package:grocery_app/ui/widgets/product_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../widgets/loading.dart';
+import '../../widgets/product_card.dart';
+import 'providers/products_view_model_provider.dart';
 
 class CategoryProductsPage extends ConsumerWidget {
   final String category;

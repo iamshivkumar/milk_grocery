@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
 
+import '../../../../core/providers/profile_provider.dart';
 import '../../cart/cart_page.dart';
 
 class CartIcon extends ConsumerWidget {

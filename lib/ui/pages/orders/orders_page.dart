@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../widgets/loading.dart';
 import 'providers/orders_provider.dart';
 import 'widgets/order_card.dart';
 

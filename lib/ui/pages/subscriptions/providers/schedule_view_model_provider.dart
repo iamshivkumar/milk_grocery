@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:grocery_app/utils/dates.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../utils/dates.dart';
 
 final scheduleViewModelProvider =
     ChangeNotifierProvider<ScheduleViewModel>((ref) => ScheduleViewModel());

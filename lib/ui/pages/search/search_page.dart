@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
-import 'package:grocery_app/ui/widgets/product_card.dart';
+import '../../widgets/loading.dart';
+import '../../widgets/product_card.dart';
 import 'providers/search_keys_provider.dart';
 import 'providers/search_view_model_provider.dart';
 

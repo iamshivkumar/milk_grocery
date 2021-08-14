@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:grocery_app/ui/pages/home/providers/banners_provider.dart';
-import 'package:grocery_app/ui/pages/home/providers/categories_provider.dart';
-import 'package:grocery_app/ui/pages/home/providers/popular_products_provider.dart';
-import 'package:grocery_app/ui/pages/home/widgets/cart_icon.dart';
-import 'package:grocery_app/ui/pages/products/category_products_page.dart';
-import 'package:grocery_app/ui/pages/search/search_page.dart';
-import 'package:grocery_app/ui/widgets/product_card.dart';
+import 'providers/banners_provider.dart';
+import 'providers/categories_provider.dart';
+import 'providers/popular_products_provider.dart';
+import 'widgets/cart_icon.dart';
+import '../products/category_products_page.dart';
+import '../search/search_page.dart';
+import '../../widgets/product_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'widgets/category_card.dart';

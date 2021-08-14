@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/ui/pages/subscriptions/providers/schedule_view_model_provider.dart';
-import 'package:grocery_app/ui/pages/subscriptions/providers/subscriptions_provider.dart';
-import 'package:grocery_app/utils/dates.dart';
-import 'package:grocery_app/utils/utils.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import '../../../../utils/dates.dart';
+import '../../../../utils/utils.dart';
+import '../providers/schedule_view_model_provider.dart';
 
 class MyCalendar extends StatelessWidget {
   const MyCalendar({
@@ -15,7 +15,6 @@ class MyCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final calenderStyle = CalendarStyle();
-    final subscriptionsStream = context.read(subscriptionsProvider);
     final model = context.read(scheduleViewModelProvider);
     return Card(
       margin: EdgeInsets.all(0),

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/models/order.dart';
-import 'package:grocery_app/ui/widgets/tow_text_row.dart';
-import 'package:grocery_app/utils/utils.dart';
+import '../../../../core/models/order.dart';
+import '../../../widgets/tow_text_row.dart';
+import '../../../../utils/utils.dart';
 
 import '../order_details_page.dart';
 
@@ -12,7 +12,6 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Card(
       child: InkWell(
         onTap: () => Navigator.push(

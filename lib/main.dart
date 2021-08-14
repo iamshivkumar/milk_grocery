@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app/ui/pages/auth/add_area_page.dart';
-import 'package:grocery_app/ui/pages/home/home_page.dart';
+import 'ui/pages/auth/add_area_page.dart';
+import 'ui/pages/auth/widgets/update_display_name_sheet.dart';
+import 'ui/pages/home/home_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'core/providers/profile_provider.dart';
-import 'core/providers/repository_provider.dart';
 import 'ui/pages/auth/providers/auth_view_model_provider.dart';
 import 'ui/pages/welcome/welcome_page.dart';
 
@@ -41,18 +41,16 @@ class MyApp extends ConsumerWidget {
           : Builder(
               builder: (context) {
                 final profileAsync = watch(profileProvider);
-                final repository = context.read(repositoryProvider);
                 return profileAsync.when(
-                  data: (profile) => profile.ready? HomePage():AreaPickPage(),
+                  data: (profile) =>
+                      profile.ready ? HomePage() : AreaPickPage(),
                   loading: () => Scaffold(
                     backgroundColor: Colors.amber,
                   ),
                   error: (e, s) {
-                    repository.createProfile().whenComplete(() {
-                      context.refresh(profileProvider);
-                    });
                     return Scaffold(
-                      backgroundColor: Colors.yellow,
+                      backgroundColor: Color(0xFFfcbf49),
+                      bottomSheet: UpdateDisplayNameSheet(),
                     );
                   },
                 );

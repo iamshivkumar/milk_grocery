@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_app/core/models/product.dart';
+
+import '../../../../core/models/product.dart';
 
 
 final productFutureProvider =

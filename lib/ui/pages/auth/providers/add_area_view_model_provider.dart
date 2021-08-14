@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:grocery_app/core/models/profile.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/core/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../core/models/profile.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/providers/repository_provider.dart';
 
 final addAreaViewModelProvider =
     ChangeNotifierProvider((ref) => AddAreaViewModel(ref));
@@ -94,7 +95,7 @@ class AddAreaViewModel extends ChangeNotifier {
         landMark: landmark,
         milkManId: _mobile,
       ));
-      if(_forEdit=true){
+      if(_forEdit==true){
         afterEdit();
       }
     } catch (e) {}

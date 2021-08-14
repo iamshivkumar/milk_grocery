@@ -1,6 +1,5 @@
-import 'package:grocery_app/core/models/cart_product.dart';
-import 'package:grocery_app/utils/labels.dart';
-
+import '../../utils/labels.dart';
+import 'cart_product.dart';
 import 'product.dart';
 
 class OrderProduct {
@@ -11,6 +10,7 @@ class OrderProduct {
   final String amount;
   final int qt;
   final String unit;
+  final bool isMilky;
 
   OrderProduct({
     required this.id,
@@ -20,6 +20,7 @@ class OrderProduct {
     required this.price,
     required this.amount,
     required this.unit,
+    required this.isMilky,
   });
 
   factory OrderProduct.fromProduct(
@@ -33,6 +34,7 @@ class OrderProduct {
       price: option.salePrice,
       qt: cartProduct.qt,
       unit: option.unit,
+      isMilky: product.category == 'Milky',
     );
   }
 
@@ -45,6 +47,7 @@ class OrderProduct {
       price: data['price'],
       qt: data['qt'],
       unit: data['unit'],
+      isMilky: data['isMilky'],
     );
   }
 
@@ -57,6 +60,7 @@ class OrderProduct {
       'price': price,
       'amount': amount,
       'unit': unit,
+      'isMilky':isMilky,
     };
   }
 

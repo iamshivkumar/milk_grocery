@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/ui/pages/auth/providers/add_area_view_model_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'providers/add_area_view_model_provider.dart';
 
 class AreaPickPage extends ConsumerWidget {
   @override
@@ -128,8 +129,8 @@ class AreaPickPage extends ConsumerWidget {
               children: [
                 SizedBox(height: 8),
                 TextFormField(
+                  textCapitalization: TextCapitalization.characters,
                   initialValue: model.number,
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: "House /Flat/ Block No",
                   ),

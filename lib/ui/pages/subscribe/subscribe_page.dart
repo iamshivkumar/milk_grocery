@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:grocery_app/core/models/product.dart';
-import 'package:grocery_app/core/models/subscription.dart';
-import 'package:grocery_app/ui/pages/subscribe/providers/subscribe_view_model_provider.dart';
-import 'package:grocery_app/ui/pages/subscribe/widgets/schedule_preview.dart';
-import 'package:grocery_app/ui/pages/subscriptions/delivery_schedule_page.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
-import 'package:grocery_app/ui/widgets/selection_tile.dart';
-import 'package:grocery_app/utils/labels.dart';
-import 'package:grocery_app/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../core/models/product.dart';
+import '../../../core/models/subscription.dart';
+import '../../../utils/labels.dart';
+import '../../../utils/utils.dart';
+import '../../widgets/loading.dart';
+import '../../widgets/selection_tile.dart';
+import '../subscriptions/delivery_schedule_page.dart';
+import 'providers/subscribe_view_model_provider.dart';
+import 'widgets/schedule_preview.dart';
 
 class SubscribePage extends HookWidget {
   final Product product;

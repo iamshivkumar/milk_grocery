@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/ui/pages/subscriptions/widgets/subscription_card.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
+import 'package:grocery_app/enums/subscription_status.dart';
+import 'widgets/subscription_card.dart';
+import '../../widgets/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'providers/subscriptions_provider.dart';

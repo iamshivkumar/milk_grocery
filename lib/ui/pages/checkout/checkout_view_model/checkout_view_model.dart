@@ -1,14 +1,14 @@
 
 import 'package:flutter/foundation.dart';
-import 'package:grocery_app/core/models/order.dart';
-import 'package:grocery_app/core/models/order_product.dart';
-import 'package:grocery_app/core/models/order_status.dart';
-import 'package:grocery_app/core/models/profile.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/core/providers/repository_provider.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+import '../../../../core/models/order.dart';
+import '../../../../core/models/order_product.dart';
+import '../../../../core/models/profile.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/providers/repository_provider.dart';
+import '../../../../enums/order_status.dart';
 
 class CheckoutViewModel extends ChangeNotifier {
   final ProviderReference ref;

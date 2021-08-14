@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:grocery_app/core/models/delivery.dart';
-import 'package:grocery_app/core/models/option.dart';
-import 'package:grocery_app/core/models/order_status.dart';
-import 'package:grocery_app/core/models/product.dart';
-import 'package:grocery_app/core/models/profile.dart';
-import 'package:grocery_app/core/models/subscription.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/core/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../core/models/delivery.dart';
+import '../../../../core/models/option.dart';
+import '../../../../core/models/product.dart';
+import '../../../../core/models/profile.dart';
+import '../../../../core/models/subscription.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/providers/repository_provider.dart';
+import '../../../../enums/order_status.dart';
+import '../../../../enums/subscription_status.dart';
 
 final subscribeViewModelProvider = ChangeNotifierProvider.autoDispose(
   (ref) => SubscribeViewModel(ref),
@@ -80,6 +82,7 @@ class SubscribeViewModel extends ChangeNotifier {
       deliveries: _generateDeliveries(),
       milkManId: _profile.milkManId!,
       image: product.images.first,
+      status: SubscriptionStatus.active,
     );
 
     try {

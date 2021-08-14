@@ -13,7 +13,7 @@ class WelcomePage extends StatelessWidget {
         child: MaterialButton(
           color: theme.primaryColor,
           onPressed: () {
-            AuthService(context).ready();
+            AuthService(context).show();
           },
           child: Text("CONTINUE"),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/models/category.dart';
-import 'package:grocery_app/ui/pages/products/category_products_page.dart';
+
+import '../../../../core/models/category.dart';
+import '../../products/category_products_page.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({Key? key, required this.category}) : super(key: key);

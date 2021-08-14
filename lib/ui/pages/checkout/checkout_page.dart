@@ -2,10 +2,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_app/core/models/order_product.dart';
-import 'package:grocery_app/ui/pages/orders/orders_page.dart';
-import 'package:grocery_app/ui/widgets/tow_text_row.dart';
 
+import '../../../core/models/order_product.dart';
+import '../../widgets/tow_text_row.dart';
+import '../orders/orders_page.dart';
 import 'checkout_view_model/checkout_view_model_provider.dart';
 
 class CheckoutPage extends ConsumerWidget {

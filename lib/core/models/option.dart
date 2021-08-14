@@ -1,6 +1,6 @@
 
 
-import 'package:grocery_app/utils/labels.dart';
+import '../../utils/labels.dart';
 
 class Option {
   final String amount;

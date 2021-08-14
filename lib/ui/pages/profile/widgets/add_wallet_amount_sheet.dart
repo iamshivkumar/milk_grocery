@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/providers/key_provider.dart';
-import 'package:grocery_app/ui/pages/profile/providers/add_wallet_amount_view_model_provider.dart';
-import 'package:grocery_app/utils/labels.dart';
+import '../../../../core/providers/key_provider.dart';
+import '../providers/add_wallet_amount_view_model_provider.dart';
+import '../../../../utils/labels.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AddWalletAmountSheet extends ConsumerWidget {

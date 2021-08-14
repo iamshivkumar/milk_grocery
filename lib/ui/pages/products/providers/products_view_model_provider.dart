@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:grocery_app/core/models/product.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../../core/models/product.dart';
 
 final productsViewModelProvider =
     ChangeNotifierProvider.family<ProductsViewModel, String>(

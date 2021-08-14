@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 // import 'package:fluttertoast/fluttertoast.dart';
 
 import '../enums/phone_auth_mode.dart';
@@ -33,13 +34,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   late String displayName;
-  Future<void> updateDisplayName() async {
-    loading = true;
-    await _auth.currentUser!.updateDisplayName(displayName);
-    _auth.currentUser!.reload();
-    user = _auth.currentUser;
-    loading = false;
-  }
+
 
   void sendOTP({required VoidCallback onVerify}) async {
     loading = true;

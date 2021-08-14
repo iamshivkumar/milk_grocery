@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/ui/pages/auth/add_area_page.dart';
-import 'package:grocery_app/ui/pages/auth/providers/add_area_view_model_provider.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
+import '../../../core/providers/profile_provider.dart';
+import '../auth/add_area_page.dart';
+import '../auth/providers/add_area_view_model_provider.dart';
+import '../../widgets/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AddressPage extends ConsumerWidget {

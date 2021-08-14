@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/ui/pages/address/address_page.dart';
-import 'package:grocery_app/ui/pages/auth/providers/auth_view_model_provider.dart';
-import 'package:grocery_app/ui/pages/profile/profile_page.dart';
-import 'package:grocery_app/ui/pages/subscriptions/delivery_schedule_page.dart';
-import 'package:grocery_app/ui/pages/subscriptions/my_subscriptions_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../core/providers/profile_provider.dart';
+import '../../address/address_page.dart';
+import '../../auth/providers/auth_view_model_provider.dart';
 import '../../orders/orders_page.dart';
+import '../../profile/profile_page.dart';
+import '../../subscriptions/delivery_schedule_page.dart';
+import '../../subscriptions/my_subscriptions_page.dart';
 
 class MyDrawer extends StatelessWidget {
   final VoidCallback close;
@@ -20,8 +21,7 @@ class MyDrawer extends StatelessWidget {
       bodyColor: theme.cardColor,
       displayColor: theme.cardColor,
     );
-    final authModel = context.read(authViewModelProvider);
-    final profileAsync = context.read(profileProvider);
+    final profile = context.read(profileProvider).data!.value;
 
     return Material(
       color: theme.accentColor,
@@ -31,8 +31,8 @@ class MyDrawer extends StatelessWidget {
           child: ListView(
             children: [
               ListTile(
-                title: Text(authModel.user!.displayName ?? ""),
-                subtitle: Text(authModel.user!.phoneNumber!),
+                title: Text(profile.name),
+                subtitle: Text(profile.mobile),
               ),
               Padding(
                 padding:
@@ -46,7 +46,7 @@ class MyDrawer extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
-                        "₹${profileAsync.data!.value.walletAmount}",
+                        "₹${profile.walletAmount}",
                         style: style.headline6,
                       ),
                     ),
@@ -123,9 +123,8 @@ class MyDrawer extends StatelessWidget {
                 onTap: () {
                   launch(
                       "mailto:shivkumarkonade@gmail.com?subject=Feedback from " +
-                          authModel.user!.displayName! +
-                          " (" +
-                          authModel.user!.phoneNumber! +
+                          profile.name +
+                          profile.mobile +
                           ")");
                 },
                 title: Text('Feedback'),
@@ -134,9 +133,9 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   launch("mailto:shivkumarkonade@gmail.com?subject=" +
-                      authModel.user!.displayName! +
+                      profile.name +
                       " (" +
-                      authModel.user!.phoneNumber! +
+                      profile.mobile +
                       "): <Subject>");
                 },
                 title: Text('Contact us'),
@@ -153,7 +152,7 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 title: Text('Sign Out'),
                 onTap: () {
-                  authModel.signOut();
+                  context.read(authViewModelProvider).signOut();
                   close();
                 },
                 leading: Icon(Icons.logout),

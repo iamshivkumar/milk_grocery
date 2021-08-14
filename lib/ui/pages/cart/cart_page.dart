@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/models/order_product.dart';
-import 'package:grocery_app/core/models/product.dart';
-import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/ui/pages/cart/providers/product_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/models/order_product.dart';
+import '../../../core/models/product.dart';
+import '../../../core/providers/profile_provider.dart';
 import '../checkout/checkout_page.dart';
+import 'providers/product_provider.dart';
 import 'widgets/cart_product_card.dart';
 
 class CartPage extends ConsumerWidget {

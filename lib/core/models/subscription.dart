@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:grocery_app/core/models/delivery.dart';
-import 'package:grocery_app/core/models/option.dart';
-import 'package:grocery_app/utils/labels.dart';
+
+import 'delivery.dart';
+import 'option.dart';
 
 class Subscription {
   final String id;
   final String customerId;
   final String customerName;
   final String customerMobile;
+  final String status;
 
   final String productId;
   final String productName;
@@ -34,6 +35,7 @@ class Subscription {
     required this.deliveries,
     required this.milkManId,
     required this.image,
+    required this.status,
   });
 
   Subscription copyWith({
@@ -50,6 +52,7 @@ class Subscription {
     String? customerName,
     String? customerMobile,
     String? image,
+    String? status,
   }) {
     return Subscription(
       id: this.id,
@@ -66,10 +69,11 @@ class Subscription {
       customerName: customerName ?? this.customerName,
       customerMobile: customerMobile ?? this.customerMobile,
       image: image ?? this.image,
+      status: status ?? this.status,
     );
   }
 
-  Map<String, dynamic> toMap({required Map<String,dynamic> map}) {
+  Map<String, dynamic> toMap({required Map<String, dynamic> map}) {
     return {
       'customerId': customerId,
       'customerName': customerName,
@@ -83,7 +87,8 @@ class Subscription {
       'deliveries': deliveries.map((e) => e.toMap()).toList(),
       'image': image,
       'milkManId': milkManId,
-      'address':map,
+      'address': map,
+      'status': status,
     };
   }
 
@@ -101,16 +106,14 @@ class Subscription {
       startDate: map['startDate'].toDate(),
       endDate: map['endDate'].toDate(),
       deliveryDay: map['deliveryDay'],
-      // dates: datesData.map((e) => e.toDate()).toList(),
       deliveries: deliveriesData
           .map((e) => Delivery.fromMap(e as Map<String, dynamic>))
           .toList(),
       milkManId: map['milkManId'],
       image: map['image'],
+      status: map['status']
     );
   }
-
-
 }
 
 class DeliveryDay {

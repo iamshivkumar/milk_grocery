@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/models/order.dart';
-import 'package:grocery_app/core/models/order_status.dart';
-import 'package:grocery_app/ui/pages/checkout/checkout_view_model/checkout_view_model_provider.dart';
-import 'package:grocery_app/ui/widgets/tow_text_row.dart';
-import 'package:grocery_app/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:grocery_app/core/providers/repository_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/models/order.dart';
+import '../../../enums/order_status.dart';
+import '../../../utils/utils.dart';
+import '../../widgets/tow_text_row.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   final Order order;
@@ -61,12 +61,17 @@ class OrderDetailsPage extends StatelessWidget {
                   ),
                 ),
                 TwoTextRow(
-                    text1: "Items (6)", text2: '₹' + order.price.toString()),
+                  text1: "Items (${order.items})",
+                  text2: '₹' + order.price.toString(),
+                ),
                 TwoTextRow(
-                    text1: "Wallet Amount",
-                    text2: '₹' + order.walletAmount.toString()),
+                  text1: "Wallet Amount",
+                  text2: '₹' + order.walletAmount.toString(),
+                ),
                 TwoTextRow(
-                    text1: 'Total Price', text2: '₹' + order.total.toString())
+                  text1: 'Total Price',
+                  text2: '₹' + order.total.toString(),
+                )
               ],
             ),
           ),
@@ -107,7 +112,8 @@ class OrderDetailsPage extends StatelessWidget {
             ),
           ),
           order.status != OrderStatus.delivered &&
-                  order.status != OrderStatus.cancelled
+                  order.status != OrderStatus.cancelled &&
+                  order.status != OrderStatus.returned
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: MaterialButton(
@@ -127,19 +133,13 @@ class OrderDetailsPage extends StatelessWidget {
                             MaterialButton(
                               onPressed: () async {
                                 Navigator.pop(context);
-
-                                // await context
-                                //     .read(checkoutViewModelProvider)
-                                //     .cancelOrder(
-                                //       orderId: order.id,
-                                //       paymentID: order.paymentId,
-                                //       paymentMethod: order.paymentMethod,
-                                //       price: order.price,
-                                //       walletAmount: order.walletAmount,
-                                //     );
+                                context.read(repositoryProvider).cancelOrder(
+                                      orderId: order.id,
+                                      price: order.price,
+                                    );
                                 Navigator.pop(context);
                               },
-                              color: Theme.of(context).accentColor,
+                              color: theme.accentColor,
                               child: Text('Yes'),
                             ),
                           ],

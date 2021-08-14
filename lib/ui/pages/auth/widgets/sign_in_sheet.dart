@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/providers/key_provider.dart';
-import 'package:grocery_app/ui/pages/auth/providers/auth_view_model_provider.dart';
-import 'package:grocery_app/ui/widgets/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
+import '../../../../core/providers/key_provider.dart';
+import '../../../widgets/loading.dart';
 import '../enums/phone_auth_mode.dart';
+import '../providers/auth_view_model_provider.dart';
 
 class SignInSheet extends ConsumerWidget {
   @override

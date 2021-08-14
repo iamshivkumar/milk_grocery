@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/utils/dates.dart';
-import 'package:grocery_app/utils/utils.dart';
+import '../../../../utils/dates.dart';
+import '../../../../utils/utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class SchedulePreview extends StatelessWidget {
