@@ -15,18 +15,23 @@ class CartPage extends ConsumerWidget {
 
     List<Product> products = [];
 
-    final int items = profile.cartProducts.isNotEmpty
-        ? profile.cartProducts
-            .map((e) => e.qt)
-            .reduce((value, element) => value + element)
-        : 0;
 
     profile.cartProducts.forEach(
       (element) {
         var productFuture = watch(productFutureProvider(element.id));
-        productFuture.whenData((value) => products.add(value));
+        productFuture.whenData((value) {
+          if (value.quantity < element.qt) {
+            element.qt = value.quantity;
+          }
+          products.add(value);
+        });
       },
     );
+
+    final int items = profile.cartProducts.isNotEmpty
+        ? profile.cartProducts.map((e) =>e.qt).reduce((value, element) => value + element)
+        : 0;
+
     final double total = products.isNotEmpty
         ? products
             .map(
@@ -55,7 +60,7 @@ class CartPage extends ConsumerWidget {
             ],
           ),
           trailing: MaterialButton(
-            onPressed: products.isNotEmpty
+            onPressed: items>0
                 ? () async {
                     Navigator.push(
                       context,
@@ -63,7 +68,7 @@ class CartPage extends ConsumerWidget {
                         builder: (context) => CheckoutPage(
                           total: total,
                           items: items,
-                          orderProducts: products
+                          orderProducts: products.where((element) => element.quantity!=0)
                               .map(
                                 (e) => OrderProduct.fromProduct(
                                   product: e,

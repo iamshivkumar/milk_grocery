@@ -117,9 +117,9 @@ class SubscribePage extends HookWidget {
                 Text(model.quantity.toString()),
                 SizedBox(width: 16),
                 IconButton(
-                  onPressed: () {
+                  onPressed: model.quantity<product.quantity? () {
                     model.quantity++;
-                  },
+                  }:null,
                   icon: Icon(Icons.add),
                 ),
                 Spacer(),

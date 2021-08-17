@@ -50,7 +50,7 @@ class CheckoutViewModel extends ChangeNotifier {
   }) {
     final double total = price  - walletAmount;
 
-    if (total > 0) {
+    if (total > 1) {
       final options = {
         'key': 'rzp_test_KmPzyFK6pErbkC',
         'amount': (total * 100).toInt(),
@@ -83,7 +83,7 @@ class CheckoutViewModel extends ChangeNotifier {
         print(res.walletName);
         _razorpay.clear();
       });
-    } else if (total == 0) {
+    } else if (total < 1) {
       _order(
         products: products,
         total: total,

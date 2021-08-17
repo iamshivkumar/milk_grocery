@@ -29,66 +29,78 @@ class ProductPage extends ConsumerWidget {
         color: theme.cardColor,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-          child: profile.isInCart(product.id)
-              ? Row(
-                  children: [
-                    Text(
-                      "${Labels.rupee}${product.options[profile.cartOptionIndex(product.id)].salePrice.toInt() * profile.cartQuanity(product.id)}",
-                      style: style.headline6,
-                    ),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        profile.updateCartQuantity(product.id, -1);
-                        repository.saveCart(profile.cartProducts);
-                      },
-                      icon: Icon(Icons.remove),
-                    ),
-                    SizedBox(width: 16),
-                    Text(profile.cartQuanity(product.id).toString()),
-                    SizedBox(width: 16),
-                    IconButton(
-                      onPressed: () {
-                        profile.updateCartQuantity(product.id, 1);
-                        repository.saveCart(profile.cartProducts);
-                      },
-                      icon: Icon(Icons.add),
-                    ),
-                  ],
-                )
-              : Row(
-                  children: [
-                    product.category == "Milky"
-                        ? Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          SubscribePage(product: product),
-                                    ),
-                                  );
-                                },
-                                color: theme.primaryColor,
-                                child: Text("SUBSCRIBE"),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
-                          profile.addToCart(id: product.id);
-                          repository.saveCart(profile.cartProducts);
-                        },
-                        color: theme.accentColor,
-                        child: Text("ADD TO CART"),
+          child: product.quantity != 0
+              ? (profile.isInCart(product.id)
+                  ? Row(
+                      children: [
+                        Text(
+                          "${Labels.rupee}${product.options[profile.cartOptionIndex(product.id)].salePrice.toInt() * profile.cartQuanity(product.id)}",
+                          style: style.headline6,
+                        ),
+                        Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            profile.updateCartQuantity(product.id, -1);
+                            repository.saveCart(profile.cartProducts);
+                          },
+                          icon: Icon(Icons.remove),
+                        ),
+                        SizedBox(width: 16),
+                        Text(profile.cartQuanity(product.id).toString()),
+                        SizedBox(width: 16),
+                        IconButton(
+                          onPressed: profile.cartQuanity(product.id)<product.quantity? () {
+                            profile.updateCartQuantity(product.id, 1);
+                            repository.saveCart(profile.cartProducts);
+                          }:null,
+                          icon: Icon(Icons.add),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        product.category == "Milky"
+                            ? Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              SubscribePage(product: product),
+                                        ),
+                                      );
+                                    },
+                                    color: theme.primaryColor,
+                                    child: Text("SUBSCRIBE"),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                        Expanded(
+                          child: MaterialButton(
+                            onPressed: () {
+                              profile.addToCart(id: product.id);
+                              repository.saveCart(profile.cartProducts);
+                            },
+                            color: theme.accentColor,
+                            child: Text("ADD TO CART"),
+                          ),
+                        ),
+                      ],
+                    ))
+              : SizedBox(
+                  height: 48,
+                  child: Center(
+                    child: Text(
+                      "Out Of Stock",
+                      style: TextStyle(
+                        color: theme.errorColor,
                       ),
                     ),
-                  ],
+                  ),
                 ),
         ),
       ),

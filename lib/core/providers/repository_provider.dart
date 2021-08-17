@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:grocery_app/core/models/order_product.dart';
 import 'package:grocery_app/enums/order_status.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -116,6 +117,11 @@ class Repository {
       'cartProducts': [],
       'walletAmount': FieldValue.increment(-order.walletAmount),
     });
+    for (var item in order.products) {
+      batch.update(_firestore.collection('products').doc(item.id), {
+        'quantity': FieldValue.increment(-item.qt),
+      });
+    }
     batch.commit();
   }
 
@@ -202,7 +208,7 @@ class Repository {
     });
   }
 
-  void cancelOrder({required double price,required String orderId}){
+  void cancelOrder({required double price,required String orderId, required List<OrderProduct> products}){
     final batch = _firestore.batch();
     batch.update(_firestore.collection('orders').doc(orderId),{
       'status': OrderStatus.cancelled,
@@ -210,6 +216,11 @@ class Repository {
     batch.update(_firestore.collection('users').doc(user.uid), {
       'walletAmount':FieldValue.increment(price),
     });
+    for (var item in products) {
+      batch.update(_firestore.collection('products').doc(item.id), {
+        'quantity': FieldValue.increment(item.qt),
+      });
+    }
     batch.commit();
   }
 }

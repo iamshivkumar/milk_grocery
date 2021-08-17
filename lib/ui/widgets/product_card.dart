@@ -81,36 +81,45 @@ class ProductCard extends ConsumerWidget {
             Divider(height: 0.5),
             SizedBox(
               height: 40,
-              child: profile.isInCart(product.id)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            profile.updateCartQuantity(product.id, -1);
+              child: product.quantity != 0
+                  ? (profile.isInCart(product.id)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                profile.updateCartQuantity(product.id, -1);
+                                repository.saveCart(profile.cartProducts);
+                              },
+                              child: Icon(Icons.remove_circle_outline),
+                            ),
+                            Text(
+                              profile.cartQuanity(product.id).toString(),
+                            ),
+                            TextButton(
+                              onPressed: product.quantity>profile.cartQuanity(product.id)? () {
+                                profile.updateCartQuantity(product.id, 1);
+                                repository.saveCart(profile.cartProducts);
+                              }:null,
+                              child: Icon(Icons.add_circle_outline),
+                            ),
+                          ],
+                        )
+                      : TextButton(
+                          onPressed: () async {
+                            profile.addToCart(id: product.id);
                             repository.saveCart(profile.cartProducts);
                           },
-                          child: Icon(Icons.remove_circle_outline),
+                          child: Icon(
+                            Icons.add_shopping_cart,
+                          ),
+                        ))
+                  : Center(
+                      child: Text(
+                        "Out Of Stock",
+                        style: style.caption!.copyWith(
+                          color: theme.errorColor,
                         ),
-                        Text(
-                          profile.cartQuanity(product.id).toString(),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            profile.updateCartQuantity(product.id, 1);
-                            repository.saveCart(profile.cartProducts);
-                          },
-                          child: Icon(Icons.add_circle_outline),
-                        ),
-                      ],
-                    )
-                  : TextButton(
-                      onPressed: () async {
-                        profile.addToCart(id: product.id);
-                        repository.saveCart(profile.cartProducts);
-                      },
-                      child: Icon(
-                        Icons.add_shopping_cart,
                       ),
                     ),
             ),

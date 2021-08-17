@@ -28,7 +28,10 @@ class CategoryCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(4),
-                child: Text(category.name),
+                child: Text(
+                  category.name,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

@@ -136,6 +136,7 @@ class OrderDetailsPage extends StatelessWidget {
                                 context.read(repositoryProvider).cancelOrder(
                                       orderId: order.id,
                                       price: order.price,
+                                      products: order.products,
                                     );
                                 Navigator.pop(context);
                               },

@@ -8,7 +8,8 @@ class Product {
   final List<Option> options;
   final List<String> images;
   final String description;
-    final String? category;
+  final String? category;
+  final int quantity;
 
   Product({
     required this.id,
@@ -16,7 +17,8 @@ class Product {
     required this.images,
     required this.description,
     required this.options,
-    required this.category
+    required this.category,
+    required this.quantity,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,7 +28,8 @@ class Product {
       'images': images,
       'description': description,
       'options': options,
-      'category':category
+      'category': category,
+      'quantity':quantity
     };
   }
 
@@ -34,7 +37,7 @@ class Product {
     Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
     final Iterable list = map['options'];
     final List<Option> optionlist = list.map((e) => Option.fromMap(e)).toList();
-    optionlist.sort((a,b)=>a.price.compareTo(b.price));
+    optionlist.sort((a, b) => a.price.compareTo(b.price));
     return Product(
       id: doc.id,
       name: map['name'],
@@ -42,6 +45,7 @@ class Product {
       description: map['description'],
       options: optionlist,
       category: map['category'],
+      quantity: map['quantity'],
     );
   }
 }
