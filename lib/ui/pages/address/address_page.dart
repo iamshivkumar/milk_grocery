@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/profile_provider.dart';
 import '../auth/add_area_page.dart';
 import '../auth/providers/add_area_view_model_provider.dart';
@@ -70,7 +71,9 @@ class AddressPage extends ConsumerWidget {
                           ),
                           Spacer(),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              launch('tel:+91${profile.milkManId}');
+                            },
                             icon: Icon(Icons.call),
                           )
                         ],

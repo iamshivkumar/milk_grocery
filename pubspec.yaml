@@ -15,6 +15,7 @@ dependencies:
   pinput: ^1.2.0
   carousel_slider: ^4.0.0
   table_calendar: ^3.0.1
+  flutter_svg: ^0.22.0
 
   #state management
   hooks_riverpod: ^0.14.0+4
@@ -32,11 +33,17 @@ dependencies:
   
   #device
   url_launcher: ^6.0.9
+  share: ^2.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.1
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/KN Daily app logo.png"
 
 flutter:
   uses-material-design: true

@@ -8,7 +8,7 @@ import '../providers/auth_view_model_provider.dart';
 
 class UpdateDisplayNameSheet extends ConsumerWidget {
   final String initialValue;
-
+  
   UpdateDisplayNameSheet({this.initialValue = ''});
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -50,9 +50,11 @@ class UpdateDisplayNameSheet extends ConsumerWidget {
                         _formKey.currentState!.save();
                         if (initialValue.isNotEmpty) {
                           repository.updateName(model.displayName);
+                          Navigator.pop(context);
                         } else {
                           repository.createUser(model.displayName);
                         }
+                        
                       }
                     },
                     color: theme.accentColor,

@@ -48,7 +48,7 @@ class CheckoutPage extends ConsumerWidget {
               },
             );
           },
-          child: Text("PAY"),
+          child: Text((total - model.walletAmount).toInt()>0? "PAY":"CONFIRM"),
         ),
       ),
       body: SingleChildScrollView(
@@ -106,18 +106,18 @@ class CheckoutPage extends ConsumerWidget {
                 child: Column(
                   children: [
                     TwoTextRow(
-                      text1: 'Items $items',
+                      text1: 'Total ($items Items)',
                       text2: '₹' + total.toString(),
                     ),
                     TwoTextRow(
                       text1: 'Wallet Amount',
                       text2: '₹' + model.walletAmount.toInt().toString(),
                     ),
-                    TwoTextRow(
-                      text1: 'Total Price',
+                   (total - model.walletAmount).toInt()>0? TwoTextRow(
+                      text1: 'Razorpay',
                       text2:
                           '₹' + (total - model.walletAmount).toInt().toString(),
-                    ),
+                    ):SizedBox(),
                   ],
                 ),
               )

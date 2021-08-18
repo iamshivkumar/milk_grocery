@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'ui/pages/auth/add_area_page.dart';
-import 'ui/pages/auth/widgets/update_display_name_sheet.dart';
+import 'ui/pages/auth/create_account_page.dart';
 import 'ui/pages/home/home_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -21,7 +21,7 @@ class MyApp extends ConsumerWidget {
     final auth = watch(authViewModelProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Grocery',
+      title: 'Kisan Nest',
       theme: ThemeData(
         primarySwatch: Colors.amber,
         primaryColor: Color(0xFFfcbf49),
@@ -48,10 +48,7 @@ class MyApp extends ConsumerWidget {
                     backgroundColor: Colors.amber,
                   ),
                   error: (e, s) {
-                    return Scaffold(
-                      backgroundColor: Color(0xFFfcbf49),
-                      bottomSheet: UpdateDisplayNameSheet(),
-                    );
+                    return CreateAccountPage();
                   },
                 );
               },
@@ -59,3 +56,4 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+

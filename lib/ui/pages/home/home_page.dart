@@ -31,7 +31,7 @@ class HomePage extends ConsumerWidget {
               onPressed: open,
             ),
           ),
-          title: Text("My Grocery"),
+          title: Text("Kisan Nest"),
           actions: [
             IconButton(
               onPressed: () => showSearch(

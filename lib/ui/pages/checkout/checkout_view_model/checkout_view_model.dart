@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -18,10 +17,6 @@ class CheckoutViewModel extends ChangeNotifier {
   Profile get profile => ref.read(profileProvider).data!.value;
   Repository get repository => ref.read(repositoryProvider);
 
-
-
-
-
   double walletAmount = 0;
 
   void useWallet(double total) {
@@ -39,7 +34,6 @@ class CheckoutViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   final _razorpay = Razorpay();
 
   void payOrder({
@@ -48,11 +42,11 @@ class CheckoutViewModel extends ChangeNotifier {
     required int items,
     required VoidCallback onOrder,
   }) {
-    final double total = price  - walletAmount;
+    final double total = price - walletAmount;
 
     if (total > 1) {
       final options = {
-        'key': 'rzp_test_KmPzyFK6pErbkC',
+        'key': 'rzp_test_x3mfqcbSvLL213',
         'amount': (total * 100).toInt(),
         'name': 'Grcoery',
         'description': 'Pay For Checkout',
@@ -128,10 +122,12 @@ class CheckoutViewModel extends ChangeNotifier {
       paymentId: paymentId,
       total: total,
       milkManId: profile.milkManId,
-      paymentMethod: "Razorpay"
+      paymentMethod: (walletAmount > 1 ? "Wallet" : "") +
+          (walletAmount > 1 && total > 1 ? " + " : "") +
+          (total > 1 ? "Razorpay" : ''),
     );
     try {
-      await repository.order(order: order,map: profile.toDeliveryAddressMap());
+      await repository.order(order: order, map: profile.toDeliveryAddressMap());
       onOrder();
     } catch (e) {
       print(e);

@@ -32,8 +32,13 @@ class ProfilePage extends ConsumerWidget {
                         showModalBottomSheet(
                           isScrollControlled: true,
                           context: context,
-                          builder: (context) => UpdateDisplayNameSheet(
-                              initialValue: profile.name),
+                          builder: (context) => Padding(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: UpdateDisplayNameSheet(
+                                initialValue: profile.name),
+                          ),
                         );
                       },
                       icon: Icon(Icons.edit),

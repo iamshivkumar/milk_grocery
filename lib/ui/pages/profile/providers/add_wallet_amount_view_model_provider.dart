@@ -19,7 +19,7 @@ class AddWalletAmountViewModel {
 
   void addAmount() {
     final options = {
-      'key': 'rzp_test_KmPzyFK6pErbkC',
+      'key': 'rzp_test_x3mfqcbSvLL213',
       'amount': (amount! * 100).toInt(),
       'name': 'Grcoery',
       'description': 'Add Wallet Amount',

@@ -128,6 +128,13 @@ class Repository {
   Stream<List<Order>> get ordersStream => _firestore
       .collection('orders')
       .where('customerId', isEqualTo: user.uid)
+      .where(
+        'createdOn',
+        isGreaterThanOrEqualTo: Dates.today.subtract(
+          Duration(days: 7),
+        ),
+      )
+      .orderBy('createdOn', descending: true)
       .snapshots()
       .map(
         (event) => event.docs
@@ -208,13 +215,16 @@ class Repository {
     });
   }
 
-  void cancelOrder({required double price,required String orderId, required List<OrderProduct> products}){
+  void cancelOrder(
+      {required double price,
+      required String orderId,
+      required List<OrderProduct> products}) {
     final batch = _firestore.batch();
-    batch.update(_firestore.collection('orders').doc(orderId),{
+    batch.update(_firestore.collection('orders').doc(orderId), {
       'status': OrderStatus.cancelled,
     });
     batch.update(_firestore.collection('users').doc(user.uid), {
-      'walletAmount':FieldValue.increment(price),
+      'walletAmount': FieldValue.increment(price),
     });
     for (var item in products) {
       batch.update(_firestore.collection('products').doc(item.id), {

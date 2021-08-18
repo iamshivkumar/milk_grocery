@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 
 import '../../../../core/providers/profile_provider.dart';
 import '../../address/address_page.dart';
@@ -122,7 +123,7 @@ class MyDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   launch(
-                      "mailto:shivkumarkonade@gmail.com?subject=Feedback from " +
+                      "mailto:mailbox.kisannest@gmail.com?subject=Feedback from " +
                           profile.name +
                           profile.mobile +
                           ")");
@@ -132,19 +133,15 @@ class MyDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  launch("mailto:shivkumarkonade@gmail.com?subject=" +
-                      profile.name +
-                      " (" +
-                      profile.mobile +
-                      "): <Subject>");
+                  launch("whatsapp://send?phone=+919999999999");
                 },
                 title: Text('Contact us'),
                 leading: Icon(Icons.message_outlined),
               ),
               ListTile(
                 onTap: () {
-                  // Share.share(
-                  //     "https://play.google.com/store/apps/details?id=org.telegram.messenger");
+                  Share.share(
+                      "https://play.google.com/store/apps/details?id=kisannest.in.daily");
                 },
                 title: Text('Share'),
                 leading: Icon(Icons.share),
