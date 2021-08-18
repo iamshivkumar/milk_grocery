@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocery_app/ui/pages/privacy_policy_page.dart';
+import 'package:grocery_app/ui/pages/terms_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 
@@ -133,7 +135,7 @@ class MyDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  launch("whatsapp://send?phone=+919999999999");
+                  launch("whatsapp://send?phone=+916364999917");
                 },
                 title: Text('Contact us'),
                 leading: Icon(Icons.message_outlined),
@@ -155,14 +157,30 @@ class MyDrawer extends StatelessWidget {
                 leading: Icon(Icons.logout),
               ),
               Divider(),
-              ListTile(
-                title: Text('About'),
-              ),
+              
               ListTile(
                 title: Text('Privacy Policy'),
+                onTap: (){
+                  close();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PrivacyPolicyPage(),
+                    ),
+                  );
+                },
               ),
               ListTile(
                 title: Text('Terms & conditions'),
+                onTap: (){
+                  close();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TermsPage(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
