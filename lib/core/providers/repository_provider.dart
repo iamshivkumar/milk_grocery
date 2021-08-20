@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:grocery_app/core/models/charge.dart';
 import 'package:grocery_app/core/models/order_product.dart';
+import 'package:grocery_app/core/models/tranzaction.dart';
 import 'package:grocery_app/enums/order_status.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -117,6 +119,33 @@ class Repository {
       'cartProducts': [],
       'walletAmount': FieldValue.increment(-order.walletAmount),
     });
+    if (order.total > 0) {
+      batch.set(
+        _firestore.collection('tranzactions').doc(),
+        Tranzaction(
+          amount: order.total,
+          name: order.customerName,
+          uid: order.customerId,
+          createdAt: Dates.now,
+          id: '',
+          paymentId: order.paymentId,
+          type: TranzactionType.whileOrdering,
+        ).toMap(),
+      );
+    }
+    if (order.walletAmount > 0) {
+      batch.set(
+        _firestore.collection('charges').doc(),
+        Charge(
+          amount: order.walletAmount,
+          from: user.uid,
+          to: null,
+          ids: [user.uid],
+          type: ChargesType.whileOrder,
+          createdAt: DateTime.now(),
+        ).toMap(),
+      );
+    }
     for (var item in order.products) {
       batch.update(_firestore.collection('products').doc(item.id), {
         'quantity': FieldValue.increment(-item.qt),
@@ -209,10 +238,28 @@ class Repository {
     });
   }
 
-  void addWalletAmount({required double amount}) {
-    _firestore.collection('users').doc(user.uid).update({
+  void addWalletAmount(
+      {required double amount,
+      required String name,
+      required String uid,
+      required String? paymentId}) {
+    final batch = _firestore.batch();
+    batch.update(_firestore.collection('users').doc(user.uid), {
       'walletAmount': FieldValue.increment(amount),
     });
+    batch.set(
+      _firestore.collection('tranzactions').doc(),
+      Tranzaction(
+        amount: amount,
+        name: name,
+        uid: uid,
+        createdAt: Dates.now,
+        id: '',
+        paymentId: paymentId,
+        type: TranzactionType.whileWalletRecharge,
+      ).toMap(),
+    );
+    batch.commit();
   }
 
   void cancelOrder(
@@ -226,11 +273,45 @@ class Repository {
     batch.update(_firestore.collection('users').doc(user.uid), {
       'walletAmount': FieldValue.increment(price),
     });
+    batch.set(
+      _firestore.collection('charges').doc(),
+      Charge(
+        amount: price,
+        from: null,
+        to: user.uid,
+        ids: [user.uid],
+        type: ChargesType.whileCancelOrder,
+        createdAt: DateTime.now(),
+      ).toMap(),
+    );
     for (var item in products) {
       batch.update(_firestore.collection('products').doc(item.id), {
         'quantity': FieldValue.increment(item.qt),
       });
     }
     batch.commit();
+  }
+
+  Future<List<QueryDocumentSnapshot>> getTranzactions(
+      {int limit = 10, DocumentSnapshot? last}) async {
+    Query ref = _firestore
+        .collection('tranzactions')
+        .where("uid", isEqualTo: user.uid)
+        .limit(limit);
+    if (last != null) {
+      ref = ref.startAfterDocument(last);
+    }
+    return await ref.get().then((value) => value.docs);
+  }
+
+  Future<List<QueryDocumentSnapshot>> getCharges(
+      {int limit = 10, DocumentSnapshot? last}) async {
+    Query ref = _firestore
+        .collection('charges')
+        .where("ids", arrayContains: user.uid).limit(limit);
+    if (last != null) {
+      ref = ref.startAfterDocument(last);
+    }
+    return await ref.get().then((value) => value.docs);
   }
 }

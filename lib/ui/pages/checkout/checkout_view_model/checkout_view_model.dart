@@ -46,7 +46,8 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (total > 1) {
       final options = {
-        'key': 'rzp_test_x3mfqcbSvLL213',
+        'key':"rzp_test_KmPzyFK6pErbkC",
+        // 'key': 'rzp_test_x3mfqcbSvLL213',
         'amount': (total * 100).toInt(),
         'name': 'Grcoery',
         'description': 'Pay For Checkout',
@@ -57,7 +58,6 @@ class CheckoutViewModel extends ChangeNotifier {
       _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
           (PaymentSuccessResponse res) {
         print("Payment Success");
-        print(res.orderId);
         _order(
           products: products,
           price: price,
@@ -69,7 +69,7 @@ class CheckoutViewModel extends ChangeNotifier {
         );
         _razorpay.clear();
       });
-      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (res) {
+      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (PaymentFailureResponse res) {
         _razorpay.clear();
       });
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,

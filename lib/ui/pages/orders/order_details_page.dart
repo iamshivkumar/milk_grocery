@@ -76,7 +76,7 @@ class OrderDetailsPage extends StatelessWidget {
                 TwoTextRow(
                   text1: 'Total Price',
                   text2: '₹' + order.price.toString(),
-                )
+                ),
               ],
             ),
           ),
@@ -99,7 +99,28 @@ class OrderDetailsPage extends StatelessWidget {
               ],
             ),
           ),
-         
+          WhiteCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Payment',
+                    style: style.headline6,
+                  ),
+                ),
+                TwoTextRow(
+                  text1: "Status",
+                  text2: order.paid ? "Paid" : "Not paid",
+                ),
+                TwoTextRow(
+                  text1: "Payment Method",
+                  text2: order.paymentMethod,
+                ),
+              ],
+            ),
+          ),
           order.createdOn.add(Duration(hours: 2)).isAfter(DateTime.now())&& order.status != OrderStatus.delivered &&
                   order.status != OrderStatus.cancelled &&
                   order.status != OrderStatus.returned

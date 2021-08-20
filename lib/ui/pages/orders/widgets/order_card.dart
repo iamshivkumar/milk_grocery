@@ -44,7 +44,7 @@ class OrderCard extends StatelessWidget {
               ),
               TwoTextRow(
                 text1: "Price",
-                text2: "₹" + order.total.toString(),
+                text2: "₹" + order.price.toString(),
               ),
               TwoTextRow(
                 text1: "Payment (${order.paymentMethod})",

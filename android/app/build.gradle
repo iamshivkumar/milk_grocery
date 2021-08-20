@@ -39,7 +39,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.shivkumar.grocery_app"
+        applicationId "kisannest.in.daily"
         minSdkVersion 20
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()

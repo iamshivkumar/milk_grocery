@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/ui/pages/privacy_policy_page.dart';
 import 'package:grocery_app/ui/pages/terms_page.dart';
+import 'package:grocery_app/ui/pages/tranzactions/tranzactions_page.dart';
+import 'package:grocery_app/ui/pages/wallet_charges/tranzactions_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 
@@ -121,6 +123,32 @@ class MyDrawer extends StatelessWidget {
                 },
                 leading: Icon(Icons.location_pin),
                 title: Text("My Address"),
+              ),
+              ListTile(
+                onTap: () {
+                  close();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TranzactionsPage(),
+                    ),
+                  );
+                },
+                leading: Icon(Icons.history),
+                title: Text("Tranzactions History"),
+              ),
+              ListTile(
+                onTap: () {
+                  close();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WalletChargesPage(),
+                    ),
+                  );
+                },
+                leading: Icon(Icons.history),
+                title: Text("Wallet Charges History"),
               ),
               ListTile(
                 onTap: () {
