@@ -30,7 +30,7 @@ class WalletChargesPage extends ConsumerWidget {
               },
               child: RefreshIndicator(
                 onRefresh: () async =>
-                    context.refresh(tranzactionsViewModelProvider),
+                    context.refresh(chargesViewModelProvider),
                 child: CustomScrollView(
                   slivers: [
                     SliverList(
@@ -38,7 +38,14 @@ class WalletChargesPage extends ConsumerWidget {
                         model.charges
                             .map(
                               (e) => ListTile(
-                                title: Text((e.from==profile.id?"-":"+")+ "${Labels.rupee}${e.amount}"),
+                                title: Text(
+                                  (e.from == profile.id ? "-" : "+") +
+                                      "${Labels.rupee}${e.amount}",
+                                  style: TextStyle(
+                                      color: e.from == profile.id
+                                          ? Colors.red
+                                          : Colors.green),
+                                ),
                                 subtitle: Text(e.type),
                                 trailing:
                                     Text(Utils.formatedDateTime(e.createdAt)),

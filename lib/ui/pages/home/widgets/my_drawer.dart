@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/ui/pages/privacy_policy_page.dart';
 import 'package:grocery_app/ui/pages/terms_page.dart';
 import 'package:grocery_app/ui/pages/tranzactions/tranzactions_page.dart';
-import 'package:grocery_app/ui/pages/wallet_charges/tranzactions_page.dart';
+import 'package:grocery_app/ui/pages/wallet_charges/charges_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 
