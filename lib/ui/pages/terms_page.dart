@@ -8,12 +8,15 @@ class TermsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Terms & Conditions"),
       ),
-      // body: SingleChildScrollView(
-      //   child: Padding(
-      //     padding: const EdgeInsets.all(24),
-      //     child: Text(Datas.terms),
-      //   ),
-      // ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            Datas.terms,
+            textAlign: TextAlign.justify,
+          ),
+        ),
+      ),
     );
   }
 }

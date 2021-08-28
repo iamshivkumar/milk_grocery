@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/core/providers/repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocery_app/utils/dates.dart';
 import '../../../core/models/order.dart';
 import '../../../enums/order_status.dart';
 import '../../../utils/utils.dart';
@@ -121,7 +122,8 @@ class OrderDetailsPage extends StatelessWidget {
               ],
             ),
           ),
-          order.createdOn.add(Duration(hours: 2)).isAfter(DateTime.now())&& order.status != OrderStatus.delivered &&
+          order.createdOn.add(Duration(hours: 2)).isAfter(DateTime.now()) &&
+                  order.status != OrderStatus.delivered &&
                   order.status != OrderStatus.cancelled &&
                   order.status != OrderStatus.returned
               ? Padding(
@@ -131,8 +133,8 @@ class OrderDetailsPage extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title:
-                              Text('Are you sure you want cancel this order?'),
+                          title: Text(
+                              'Are you sure you want to cancel this order?'),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -157,11 +159,47 @@ class OrderDetailsPage extends StatelessWidget {
                         ),
                       );
                     },
-                    color: Theme.of(context).accentColor,
+                    color: theme.accentColor,
                     child: Text('CANCEL ORDER'),
                   ),
                 )
               : SizedBox(),
+          order.status == OrderStatus.delivered &&
+                  order.deliveryDate.isAfter(Dates.today)
+              ? Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: MaterialButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(
+                              'Are you sure you want to return this order?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('No'),
+                            ),
+                            MaterialButton(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                context.read(repositoryProvider).requestForRefundOrder(order.id);
+                                Navigator.pop(context);
+                              },
+                              color: theme.accentColor,
+                              child: Text('Yes'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    color: theme.accentColor,
+                    child: Text('REQUEST FOR REFUND'),
+                  ),
+                )
+              : SizedBox()
         ],
       ),
     );

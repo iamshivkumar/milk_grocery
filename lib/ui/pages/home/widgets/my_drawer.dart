@@ -163,7 +163,47 @@ class MyDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  launch("whatsapp://send?phone=+916364999917");
+                  close();
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => Material(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  launch("tel://+916364999917");
+                                },
+                                child: SizedBox(
+                                  height: 48,
+                                  width: 48,
+                                  child: Image.asset("assets/call.png"),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  launch("whatsapp://send?phone=+916364999917");
+                                },
+                                child: SizedBox(
+                                  height: 48,
+                                  width: 48,
+                                  child: Image.asset("assets/whats_app.jpeg"),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
                 },
                 title: Text('Contact us'),
                 leading: Icon(Icons.message_outlined),
@@ -185,10 +225,9 @@ class MyDrawer extends StatelessWidget {
                 leading: Icon(Icons.logout),
               ),
               Divider(),
-              
               ListTile(
                 title: Text('Privacy Policy'),
-                onTap: (){
+                onTap: () {
                   close();
                   Navigator.push(
                     context,
@@ -200,7 +239,7 @@ class MyDrawer extends StatelessWidget {
               ),
               ListTile(
                 title: Text('Terms & conditions'),
-                onTap: (){
+                onTap: () {
                   close();
                   Navigator.push(
                     context,

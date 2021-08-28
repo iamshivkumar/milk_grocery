@@ -308,10 +308,17 @@ class Repository {
       {int limit = 10, DocumentSnapshot? last}) async {
     Query ref = _firestore
         .collection('charges')
-        .where("ids", arrayContains: user.uid).limit(limit);
+        .where("ids", arrayContains: user.uid)
+        .limit(limit);
     if (last != null) {
       ref = ref.startAfterDocument(last);
     }
     return await ref.get().then((value) => value.docs);
+  }
+
+  void requestForRefundOrder(String id) {
+    _firestore.collection('orders').doc(id).update({
+      'status': OrderStatus.requestedForRefund,
+    });
   }
 }

@@ -9,7 +9,6 @@ class Order {
   final String customerName;
   final String customerMobile;
 
-
   final double price;
   final double walletAmount;
   final double total;

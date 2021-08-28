@@ -44,6 +44,7 @@ class AuthViewModel extends ChangeNotifier {
         verificationCompleted: (PhoneAuthCredential credential) async {
           loading = true;
           user = (await _auth.signInWithCredential(credential)).user;
+          notifyListeners();
           onVerify();
           // Fluttertoast.showToast(msg: "Sign in successful");
         },
