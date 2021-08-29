@@ -46,7 +46,7 @@ class Option {
       'unit': unit,
       'barcode': barcode,
       'location': location,
-      'quantity': quantity
+      'quantity': quantity,
     };
   }
 
