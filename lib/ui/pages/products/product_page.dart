@@ -20,7 +20,9 @@ class ProductPage extends ConsumerWidget {
 
     final profile = watch(profileProvider).data!.value;
     final repository = context.read(repositoryProvider);
-
+    final option = profile.isInCart(product.id)
+        ? product.options[profile.cartOptionIndex(product.id)]
+        : product.options.where((element) => element.quantity > 0).first;
     return Scaffold(
       appBar: AppBar(
         title: Text(product.name),
@@ -29,7 +31,7 @@ class ProductPage extends ConsumerWidget {
         color: theme.cardColor,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-          child: product.quantity != 0
+          child: option.quantity > 0
               ? (profile.isInCart(product.id)
                   ? Row(
                       children: [
@@ -49,10 +51,13 @@ class ProductPage extends ConsumerWidget {
                         Text(profile.cartQuanity(product.id).toString()),
                         SizedBox(width: 16),
                         IconButton(
-                          onPressed: profile.cartQuanity(product.id)<product.quantity? () {
-                            profile.updateCartQuantity(product.id, 1);
-                            repository.saveCart(profile.cartProducts);
-                          }:null,
+                          onPressed:
+                              profile.cartQuanity(product.id) < option.quantity
+                                  ? () {
+                                      profile.updateCartQuantity(product.id, 1);
+                                      repository.saveCart(profile.cartProducts);
+                                    }
+                                  : null,
                           icon: Icon(Icons.add),
                         ),
                       ],
@@ -82,7 +87,9 @@ class ProductPage extends ConsumerWidget {
                         Expanded(
                           child: MaterialButton(
                             onPressed: () {
-                              profile.addToCart(id: product.id);
+                              profile.addToCart(
+                                  id: product.id,
+                                  index: product.options.indexOf(option));
                               repository.saveCart(profile.cartProducts);
                             },
                             color: theme.accentColor,
@@ -139,6 +146,7 @@ class ProductPage extends ConsumerWidget {
                           color: value ? theme.primaryColorLight : null,
                           child: SelectionTile(
                             value: value,
+                            active: e.quantity > 0,
                             onTap: () {
                               if (!profile.isInCart(product.id)) {
                                 profile.addToCart(
@@ -151,7 +159,6 @@ class ProductPage extends ConsumerWidget {
                                   index: product.options.indexOf(e),
                                 );
                               }
-
                               repository.saveCart(profile.cartProducts);
                             },
                             title: Text(

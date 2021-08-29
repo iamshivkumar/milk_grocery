@@ -9,7 +9,6 @@ class Product {
   final List<String> images;
   final String description;
   final String? category;
-  final int quantity;
 
   Product({
     required this.id,
@@ -18,7 +17,6 @@ class Product {
     required this.description,
     required this.options,
     required this.category,
-    required this.quantity,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,7 +27,6 @@ class Product {
       'description': description,
       'options': options,
       'category': category,
-      'quantity':quantity
     };
   }
 
@@ -45,7 +42,6 @@ class Product {
       description: map['description'],
       options: optionlist,
       category: map['category'],
-      quantity: map['quantity'],
     );
   }
 }

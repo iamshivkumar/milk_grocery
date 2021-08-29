@@ -13,12 +13,11 @@ class ProductCard extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-
     final profile = watch(profileProvider).data!.value;
     final repository = context.read(repositoryProvider);
     final option = profile.isInCart(product.id)
         ? product.options[profile.cartOptionIndex(product.id)]
-        : product.options.first;
+        : product.options.where((element) => element.quantity>0).first;
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -81,7 +80,7 @@ class ProductCard extends ConsumerWidget {
             Divider(height: 0.5),
             SizedBox(
               height: 40,
-              child: product.quantity != 0
+              child: option.quantity > 0
                   ? (profile.isInCart(product.id)
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -97,7 +96,7 @@ class ProductCard extends ConsumerWidget {
                               profile.cartQuanity(product.id).toString(),
                             ),
                             TextButton(
-                              onPressed: product.quantity>profile.cartQuanity(product.id)? () {
+                              onPressed: option.quantity>profile.cartQuanity(product.id)? () {
                                 profile.updateCartQuantity(product.id, 1);
                                 repository.saveCart(profile.cartProducts);
                               }:null,
@@ -107,7 +106,7 @@ class ProductCard extends ConsumerWidget {
                         )
                       : TextButton(
                           onPressed: () async {
-                            profile.addToCart(id: product.id);
+                            profile.addToCart(id: product.id,index: product.options.indexOf(option));
                             repository.saveCart(profile.cartProducts);
                           },
                           child: Icon(

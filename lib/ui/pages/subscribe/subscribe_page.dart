@@ -117,9 +117,9 @@ class SubscribePage extends HookWidget {
                 Text(model.quantity.toString()),
                 SizedBox(width: 16),
                 IconButton(
-                  onPressed: model.quantity<product.quantity? () {
+                  onPressed: () {
                     model.quantity++;
-                  }:null,
+                  },
                   icon: Icon(Icons.add),
                 ),
                 Spacer(),
@@ -198,7 +198,7 @@ class SubscribePage extends HookWidget {
                   .toList(),
             ),
           ),
-          SchedulePreview(dates: model.dates)
+          SchedulePreview(dates: model.dates),
         ],
       ),
     );

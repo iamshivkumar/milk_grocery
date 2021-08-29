@@ -122,7 +122,9 @@ class CartProductCard extends StatelessWidget {
                             ),
                             Expanded(
                               flex: 7,
-                              child: product.quantity != 0
+                              child: product
+                                          .options[profile
+                                              .cartOptionIndex(product.id)].quantity > 0
                                   ? Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -157,7 +159,9 @@ class CartProductCard extends StatelessWidget {
                                               .withOpacity(0.2),
                                           highlightColor: Colors.transparent,
                                           icon: Icon(Icons.add_circle_outline),
-                                          onPressed: product.quantity > qt
+                                          onPressed: product
+                                          .options[profile
+                                              .cartOptionIndex(product.id)].quantity > qt
                                               ? () {
                                                   profile.updateCartQuantity(
                                                       product.id, 1);

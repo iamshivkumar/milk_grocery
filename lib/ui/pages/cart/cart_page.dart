@@ -20,8 +20,8 @@ class CartPage extends ConsumerWidget {
       (element) {
         var productFuture = watch(productFutureProvider(element.id));
         productFuture.whenData((value) {
-          if (value.quantity < element.qt) {
-            element.qt = value.quantity;
+          if (value.options[element.optionIndex].quantity < element.qt) {
+            element.qt = value.options[element.optionIndex].quantity;
           }
           products.add(value);
         });
@@ -68,7 +68,7 @@ class CartPage extends ConsumerWidget {
                         builder: (context) => CheckoutPage(
                           total: total,
                           items: items,
-                          orderProducts: products.where((element) => element.quantity!=0)
+                          orderProducts: products.where((element) => element.options[profile.cartProduct(element.id).optionIndex].quantity!=0)
                               .map(
                                 (e) => OrderProduct.fromProduct(
                                   product: e,
