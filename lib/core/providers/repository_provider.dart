@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery_app/core/models/charge.dart';
+import 'package:grocery_app/core/models/option.dart';
 import 'package:grocery_app/core/models/order_product.dart';
 import 'package:grocery_app/core/models/tranzaction.dart';
 import 'package:grocery_app/enums/order_status.dart';
@@ -146,9 +147,16 @@ class Repository {
         ).toMap(),
       );
     }
-    for (var item in order.products) {
-      batch.update(_firestore.collection('products').doc(item.id), {
-        'quantity': FieldValue.increment(-item.qt),
+    for (var item in order.products.where((element) => !element.isMilky)) {
+      _firestore.collection('products').doc(item.id).get().then((value) {
+        final product = Product.fromFirestore(value);
+        product.options
+            .where((element) => element.amountLabel == item.amountLabel)
+            .first
+            .increment(-item.qt);
+        _firestore.collection('products').doc(item.id).update({
+          'options': product.options.map((e) => e.toMap()).toList(),
+        });
       });
     }
     batch.commit();
@@ -265,7 +273,7 @@ class Repository {
   void cancelOrder(
       {required double price,
       required String orderId,
-      required List<OrderProduct> products}) {
+      required List<OrderProduct> orderProducts}) {
     final batch = _firestore.batch();
     batch.update(_firestore.collection('orders').doc(orderId), {
       'status': OrderStatus.cancelled,
@@ -284,9 +292,16 @@ class Repository {
         createdAt: DateTime.now(),
       ).toMap(),
     );
-    for (var item in products) {
-      batch.update(_firestore.collection('products').doc(item.id), {
-        'quantity': FieldValue.increment(item.qt),
+    for (var item in orderProducts.where((element) => !element.isMilky)) {
+      _firestore.collection('products').doc(item.id).get().then((value) {
+        final product = Product.fromFirestore(value);
+        product.options
+            .where((element) => element.amountLabel == item.amountLabel)
+            .first
+            .increment(item.qt);
+        _firestore.collection('products').doc(item.id).update({
+          'options': product.options.map((e) => e.toMap()).toList(),
+        });
       });
     }
     batch.commit();

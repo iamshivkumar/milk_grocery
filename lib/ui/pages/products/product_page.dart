@@ -64,7 +64,7 @@ class ProductPage extends ConsumerWidget {
                     )
                   : Row(
                       children: [
-                        product.category == "Milky"
+                        product.isMilky
                             ? Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 8),
@@ -156,6 +156,7 @@ class ProductPage extends ConsumerWidget {
                               } else if (!value) {
                                 profile.updateIndex(
                                   id: product.id,
+                                  quantity: e.quantity,
                                   index: product.options.indexOf(e),
                                 );
                               }

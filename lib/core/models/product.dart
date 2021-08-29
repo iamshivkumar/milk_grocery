@@ -30,6 +30,8 @@ class Product {
     };
   }
 
+  bool get isMilky => category == "Milky";
+
   factory Product.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
     final Iterable list = map['options'];

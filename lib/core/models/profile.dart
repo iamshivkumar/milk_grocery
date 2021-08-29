@@ -124,8 +124,11 @@ class Profile {
   CartProduct cartProduct(String id) =>
       cartProducts.where((element) => element.id == id).first;
 
-  void updateIndex({required String id, required int index}) {
+  void updateIndex({required String id, required int index, required int quantity}) {
     cartProducts.where((element) => element.id == id).first.optionIndex = index;
+    if(cartProducts.where((element) => element.id == id).first.qt>quantity){
+      cartProducts.where((element) => element.id == id).first.qt = quantity;
+    }
   }
 
   void updateCartQuantity(String id, int qt) {
