@@ -21,6 +21,7 @@ class Order {
   final bool paid;
   final String? paymentId;
   final DateTime createdOn;
+  final String? refundReason;
 
   DateTime get deliveryDate => createdOn.add(Duration(days: 1));
 
@@ -40,6 +41,7 @@ class Order {
     required this.paid,
     this.paymentId,
     required this.createdOn,
+    this.refundReason,
   });
 
   Order copyWith({
@@ -120,6 +122,7 @@ class Order {
       paymentId: map['paymentId'],
       createdOn: map['createdOn'].toDate(),
       total: map['total'],
+      refundReason: map['refundReason'],
     );
   }
 }

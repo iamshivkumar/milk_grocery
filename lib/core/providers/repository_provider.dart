@@ -331,9 +331,10 @@ class Repository {
     return await ref.get().then((value) => value.docs);
   }
 
-  void requestForRefundOrder(String id) {
+  void requestForRefundOrder({required String id, required String reason}) {
     _firestore.collection('orders').doc(id).update({
       'status': OrderStatus.requestedForRefund,
+      'refundReason':reason,
     });
   }
 }

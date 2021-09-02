@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_app/core/providers/repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:grocery_app/core/providers/repository_provider.dart';
 import 'package:grocery_app/utils/dates.dart';
+
 import '../../../core/models/order.dart';
 import '../../../enums/order_status.dart';
 import '../../../utils/utils.dart';
 import '../../widgets/tow_text_row.dart';
+import 'widgets/request_refund_sheet.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   final Order order;
@@ -93,6 +96,9 @@ class OrderDetailsPage extends StatelessWidget {
                   ),
                 ),
                 TwoTextRow(text1: "Status", text2: order.status),
+                order.refundReason != null
+                    ? TwoTextRow(text1: "Reason", text2: order.refundReason!)
+                    : SizedBox(),
                 TwoTextRow(
                   text1: "Delivery Date",
                   text2: Utils.formatedDate(order.deliveryDate),
@@ -170,28 +176,11 @@ class OrderDetailsPage extends StatelessWidget {
                   padding: const EdgeInsets.all(4),
                   child: MaterialButton(
                     onPressed: () {
-                      showDialog(
+                      showModalBottomSheet(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(
-                              'Are you sure you want to return this order?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('No'),
-                            ),
-                            MaterialButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
-                                context.read(repositoryProvider).requestForRefundOrder(order.id);
-                                Navigator.pop(context);
-                              },
-                              color: theme.accentColor,
-                              child: Text('Yes'),
-                            ),
-                          ],
+                        isScrollControlled: true,
+                        builder: (context) => RequestRefundSheet(
+                          id: order.id,
                         ),
                       );
                     },
