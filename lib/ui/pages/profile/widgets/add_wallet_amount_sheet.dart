@@ -10,6 +10,7 @@ class AddWalletAmountSheet extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final _formKey = watch(keyProvder);
     final model = watch(addWalletAmountViewModelProvider);
+
     final theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.only(
@@ -30,10 +31,21 @@ class AddWalletAmountSheet extends ConsumerWidget {
               child: TextFormField(
                 autofocus: true,
                 keyboardType: TextInputType.number,
-                onSaved: (v) => model.amount = double.parse(v!),
+                onSaved: (v) => model.amount = v!.isEmpty ? 0 : double.parse(v),
+                onChanged: (v) =>
+                    model.amount = v.isEmpty ? 0 : double.parse(v),
                 validator: (v) => v!.isEmpty ? "Enter Amount" : null,
                 decoration: InputDecoration(
-                  prefixText: Labels.rupee+" ",
+                  prefixText: Labels.rupee + " ",
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                "${Labels.rupee}${(model.amount ?? 0) + model.extra} ${model.extraPercentage} will be added to your wallet.",
+                style: TextStyle(
+                  color: Colors.green,
                 ),
               ),
             ),

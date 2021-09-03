@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery_app/core/models/charge.dart';
+import 'package:grocery_app/core/models/master_data.dart';
 import 'package:grocery_app/core/models/option.dart';
 import 'package:grocery_app/core/models/order_product.dart';
 import 'package:grocery_app/core/models/tranzaction.dart';
@@ -248,13 +249,25 @@ class Repository {
 
   void addWalletAmount(
       {required double amount,
+      required double extra,
       required String name,
       required String uid,
       required String? paymentId}) {
     final batch = _firestore.batch();
     batch.update(_firestore.collection('users').doc(user.uid), {
-      'walletAmount': FieldValue.increment(amount),
+      'walletAmount': FieldValue.increment(amount+extra),
     });
+    batch.set(
+      _firestore.collection('charges').doc(),
+      Charge(
+        amount: amount+extra,
+        from: null,
+        to: user.uid,
+        ids: [user.uid],
+        type: TranzactionType.whileWalletRecharge,
+        createdAt: DateTime.now(),
+      ).toMap(),
+    );
     batch.set(
       _firestore.collection('tranzactions').doc(),
       Tranzaction(
@@ -324,6 +337,7 @@ class Repository {
     Query ref = _firestore
         .collection('charges')
         .where("ids", arrayContains: user.uid)
+        .orderBy("createdAt",descending: true)
         .limit(limit);
     if (last != null) {
       ref = ref.startAfterDocument(last);
@@ -337,4 +351,9 @@ class Repository {
       'refundReason':reason,
     });
   }
+
+    Stream<Masterdata> get masterdataStream =>
+      _firestore.collection('masterData').doc('masterData_v1').snapshots().map(
+            (event) => Masterdata.fromMap(event),
+          );
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:grocery_app/core/models/offer.dart';
+import 'package:grocery_app/core/providers/master_data_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -16,6 +18,7 @@ class CheckoutViewModel extends ChangeNotifier {
 
   Profile get profile => ref.read(profileProvider).data!.value;
   Repository get repository => ref.read(repositoryProvider);
+  List<Offer> get _offers => ref.read(masterdataProvider).data!.value.offers;
 
   double walletAmount = 0;
 
@@ -42,11 +45,11 @@ class CheckoutViewModel extends ChangeNotifier {
     required int items,
     required VoidCallback onOrder,
   }) {
-    final double total = price - walletAmount;
+    final double total = price - walletAmount - extra(price - walletAmount);
 
     if (total > 1) {
       final options = {
-        'key':"rzp_test_KmPzyFK6pErbkC",
+        'key': "rzp_test_KmPzyFK6pErbkC",
         // 'key': 'rzp_test_x3mfqcbSvLL213',
         'amount': (total * 100).toInt(),
         'name': 'Grcoery',
@@ -132,5 +135,26 @@ class CheckoutViewModel extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  double extra(double amount) {
+    final list =
+        _offers.where((element) => element.amount <= (amount)).toList();
+    if (list.isEmpty) {
+      return 0;
+    }
+    list.sort((a, b) => a.amount.compareTo(b.amount));
+    return list.last.percentage * (amount) / 100;
+  }
+
+  String  percentage(double amount) {
+    final list =
+        _offers.where((element) => element.amount <= (amount)).toList();
+    if (list.isEmpty) {
+      return "";
+    }
+    list.sort((a, b) => a.amount.compareTo(b.amount));
+
+    return "(${list.last.percentage.toInt()}\%)";
   }
 }

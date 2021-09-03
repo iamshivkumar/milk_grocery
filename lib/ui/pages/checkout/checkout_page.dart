@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,7 +47,8 @@ class CheckoutPage extends ConsumerWidget {
               },
             );
           },
-          child: Text((total - model.walletAmount).toInt()>0? "PAY":"CONFIRM"),
+          child: Text(
+              (total - model.walletAmount).toInt() > 0 ? "PAY" : "CONFIRM"),
         ),
       ),
       body: SingleChildScrollView(
@@ -113,11 +113,24 @@ class CheckoutPage extends ConsumerWidget {
                       text1: 'Wallet Amount',
                       text2: '₹' + model.walletAmount.toInt().toString(),
                     ),
-                   (total - model.walletAmount).toInt()>0? TwoTextRow(
-                      text1: 'Razorpay',
-                      text2:
-                          '₹' + (total - model.walletAmount).toInt().toString(),
-                    ):SizedBox(),
+                    (total - model.walletAmount).toInt() > 0
+                        ? Column(
+                            children: [
+                              TwoTextRow(
+                                text1: 'Discount',
+                                text2:
+                                    '₹${model.extra(total - model.walletAmount)} ${model.percentage(total - model.walletAmount)}',
+                              ),
+                              TwoTextRow(
+                                text1: 'Razorpay',
+                                text2: '₹' +
+                                    (total - model.walletAmount- model.extra(total - model.walletAmount))
+                                        .toInt()
+                                        .toString(),
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
                   ],
                 ),
               )
