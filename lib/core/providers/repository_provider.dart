@@ -116,16 +116,25 @@ class Repository {
       {required Map<String, dynamic> map, required Order order}) async {
     late int number;
     try {
-      number = await _firestore.collection('dates').doc(Dates.today.toString()).get().then((value) => value.data()!['value']);
+      number = await _firestore
+          .collection('dates')
+          .doc(Dates.today.toString())
+          .get()
+          .then((value) => value.data()!['value']);
     } catch (e) {
-      number  = 1;
+      number = 1;
     }
-    _firestore.collection('dates').doc(Dates.today.toString()).set({"value":number+1});
+    _firestore
+        .collection('dates')
+        .doc(Dates.today.toString())
+        .set({"value": number + 1});
     final batch = _firestore.batch();
     final ref = _firestore.collection('orders').doc();
-    batch.set(ref, order.copyWith(
-      orderId: Utils.dateId()+number.toString()
-    ).toMap(map: map));
+    batch.set(
+        ref,
+        order
+            .copyWith(orderId: Utils.dateId() + number.toString())
+            .toMap(map: map));
     batch.update(_firestore.collection('users').doc(order.customerId), {
       'cartProducts': [],
       'walletAmount': FieldValue.increment(-order.walletAmount),
@@ -164,6 +173,15 @@ class Repository {
             .where((element) => element.amountLabel == item.amountLabel)
             .first
             .increment(-item.qt);
+        final option = product.options
+            .where((element) => element.amountLabel == item.amountLabel)
+            .first;
+        if (option.quantity < 2) {
+          _firestore.collection("stockNotice").doc('stockNotice').update({
+            "values": FieldValue.arrayUnion(
+                ["${product.name} - ${option.amountLabel}"])
+          });
+        }
         _firestore.collection('products').doc(item.id).update({
           'options': product.options.map((e) => e.toMap()).toList(),
         });
@@ -264,12 +282,12 @@ class Repository {
       required String? paymentId}) {
     final batch = _firestore.batch();
     batch.update(_firestore.collection('users').doc(user.uid), {
-      'walletAmount': FieldValue.increment(amount+extra),
+      'walletAmount': FieldValue.increment(amount + extra),
     });
     batch.set(
       _firestore.collection('charges').doc(),
       Charge(
-        amount: amount+extra,
+        amount: amount + extra,
         from: null,
         to: user.uid,
         ids: [user.uid],
@@ -346,7 +364,7 @@ class Repository {
     Query ref = _firestore
         .collection('charges')
         .where("ids", arrayContains: user.uid)
-        .orderBy("createdAt",descending: true)
+        .orderBy("createdAt", descending: true)
         .limit(limit);
     if (last != null) {
       ref = ref.startAfterDocument(last);
@@ -357,12 +375,13 @@ class Repository {
   void requestForRefundOrder({required String id, required String reason}) {
     _firestore.collection('orders').doc(id).update({
       'status': OrderStatus.requestedForRefund,
-      'refundReason':reason,
+      'refundReason': reason,
     });
   }
 
-    Stream<Masterdata> get masterdataStream =>
+  Stream<Masterdata> get masterdataStream =>
       _firestore.collection('masterData').doc('masterData_v1').snapshots().map(
             (event) => Masterdata.fromMap(event),
           );
+
 }
