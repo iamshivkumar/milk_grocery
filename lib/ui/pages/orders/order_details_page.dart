@@ -72,6 +72,12 @@ class OrderDetailsPage extends StatelessWidget {
                   text1: "Wallet Amount",
                   text2: '₹' + order.walletAmount.toString(),
                 ),
+                order.discount != null
+                    ? TwoTextRow(
+                        text1: "Discount",
+                        text2: order.discount!,
+                      )
+                    : SizedBox(),
                 TwoTextRow(
                   text1: "Razorpay",
                   text2: '₹' + order.total.toString(),

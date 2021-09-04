@@ -1,3 +1,4 @@
+import 'package:grocery_app/utils/dates.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
@@ -38,6 +39,10 @@ class Utils {
 
   static String weekD(DateTime dateTime) {
     return DateFormat(DateFormat.WEEKDAY).format(dateTime).split('').first;
+  }
+
+  static String dateId(){
+    return DateFormat("yyMMdd-").format(Dates.today);
   }
 
   static String formatedDate(DateTime dateTime) =>

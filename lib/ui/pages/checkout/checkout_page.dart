@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocery_app/ui/widgets/loading.dart';
 
 import '../../../core/models/order_product.dart';
 import '../../widgets/tow_text_row.dart';
@@ -29,7 +30,7 @@ class CheckoutPage extends ConsumerWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: MaterialButton(
+        child:  model.loading?Loading(): MaterialButton(
           color: theme.accentColor,
           onPressed: () {
             model.payOrder(

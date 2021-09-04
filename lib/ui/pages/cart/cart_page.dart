@@ -29,7 +29,7 @@ class CartPage extends ConsumerWidget {
     );
 
     final int items = profile.cartProducts.isNotEmpty
-        ? profile.cartProducts.map((e) =>e.qt).reduce((value, element) => value + element)
+        ? profile.cartProducts.map((e) =>e.qt>0?e.qt:0).reduce((value, element) => value + element)
         : 0;
 
     final double total = products.isNotEmpty
@@ -37,7 +37,7 @@ class CartPage extends ConsumerWidget {
             .map(
               (e) =>
                   e.options[profile.cartOptionIndex(e.id)].salePrice *
-                  profile.cartQuanity(e.id),
+                  (profile.cartQuanity(e.id)>0?profile.cartQuanity(e.id):0),
             )
             .reduce((value, element) => value + element)
         : 0;

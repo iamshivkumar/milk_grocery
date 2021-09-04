@@ -4,11 +4,12 @@ import 'order_product.dart';
 
 class Order {
   final String id;
-
+  
+  final String orderId;
   final String customerId;
   final String customerName;
   final String customerMobile;
-
+  final String? discount;
   final double price;
   final double walletAmount;
   final double total;
@@ -42,6 +43,8 @@ class Order {
     this.paymentId,
     required this.createdOn,
     this.refundReason,
+    required this.orderId,
+    this.discount
   });
 
   Order copyWith({
@@ -60,6 +63,8 @@ class Order {
     String? paymentId,
     DateTime? createdOn,
     double? total,
+    String? orderId,
+    String? discount
   }) {
     return Order(
       id: id ?? this.id,
@@ -77,6 +82,8 @@ class Order {
       paymentId: paymentId ?? this.paymentId,
       createdOn: createdOn ?? this.createdOn,
       total: total ?? this.total,
+      orderId: orderId??this.orderId,
+      discount: discount??this.discount,
     );
   }
 
@@ -97,6 +104,8 @@ class Order {
       'createdOn': Timestamp.fromDate(createdOn),
       'total': total,
       'address':map,
+      'orderId':orderId,
+      'discount':discount
     };
   }
 
@@ -123,6 +132,8 @@ class Order {
       createdOn: map['createdOn'].toDate(),
       total: map['total'],
       refundReason: map['refundReason'],
+      orderId: map['orderId'],
+      discount: map['discount'],
     );
   }
 }

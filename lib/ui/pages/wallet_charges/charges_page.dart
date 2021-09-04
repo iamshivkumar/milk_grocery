@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/core/providers/profile_provider.dart';
-import 'package:grocery_app/ui/pages/tranzactions/providers/tranzactions_view_model_provider.dart';
 import 'package:grocery_app/ui/pages/wallet_charges/providers/charges_view_model_provider.dart';
 import 'package:grocery_app/utils/labels.dart';
 import 'package:grocery_app/utils/utils.dart';

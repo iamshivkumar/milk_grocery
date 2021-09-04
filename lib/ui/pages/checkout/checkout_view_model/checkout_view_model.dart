@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:grocery_app/core/models/offer.dart';
 import 'package:grocery_app/core/providers/master_data_provider.dart';
+import 'package:grocery_app/utils/labels.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -44,9 +45,10 @@ class CheckoutViewModel extends ChangeNotifier {
     required double price,
     required int items,
     required VoidCallback onOrder,
-  }) {
+  }) async {
+    loading = true;
     final double total = price - walletAmount - extra(price - walletAmount);
-
+    final String? discount = extra(price - walletAmount)>0? "${Labels.rupee}${extra(price - walletAmount)} ${percentage(price - walletAmount)}":null;
     if (total > 1) {
       final options = {
         'key': "rzp_test_KmPzyFK6pErbkC",
@@ -59,9 +61,9 @@ class CheckoutViewModel extends ChangeNotifier {
 
       _razorpay.open(options);
       _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-          (PaymentSuccessResponse res) {
+          (PaymentSuccessResponse res) async {
         print("Payment Success");
-        _order(
+        await _order(
           products: products,
           price: price,
           total: total,
@@ -69,39 +71,46 @@ class CheckoutViewModel extends ChangeNotifier {
           paid: true,
           onOrder: onOrder,
           paymentId: res.paymentId,
+          discount: discount,
         );
         _razorpay.clear();
+        loading = false;
       });
       _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (PaymentFailureResponse res) {
         _razorpay.clear();
+        loading = false;
       });
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
           (ExternalWalletResponse res) {
-        print(res.walletName);
         _razorpay.clear();
+        loading = false;
       });
     } else if (total < 1) {
-      _order(
+      await _order(
         products: products,
         total: total,
         price: price,
         items: items,
         paid: true,
         onOrder: onOrder,
+        discount: discount,
       );
+      loading = false;
     } else {
-      _order(
+      await _order(
         products: products,
         total: total,
         price: price,
         items: items,
         paid: false,
         onOrder: onOrder,
+        discount: discount,
       );
+      loading = false;
     }
   }
 
-  void _order({
+  Future<void> _order({
     required List<OrderProduct> products,
     required double price,
     required double total,
@@ -109,6 +118,7 @@ class CheckoutViewModel extends ChangeNotifier {
     required bool paid,
     required VoidCallback onOrder,
     String? paymentId,
+    String? discount,
   }) async {
     final Order order = Order(
       id: '',
@@ -124,6 +134,8 @@ class CheckoutViewModel extends ChangeNotifier {
       items: items,
       paymentId: paymentId,
       total: total,
+      orderId: '',
+      discount: discount,
       milkManId: profile.milkManId,
       paymentMethod: (walletAmount > 1 ? "Wallet" : "") +
           (walletAmount > 1 && total > 1 ? " + " : "") +
@@ -137,6 +149,13 @@ class CheckoutViewModel extends ChangeNotifier {
     }
   }
 
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool loading) {
+    _loading = loading;
+    notifyListeners();
+  }
+
   double extra(double amount) {
     final list =
         _offers.where((element) => element.amount <= (amount)).toList();
@@ -147,7 +166,7 @@ class CheckoutViewModel extends ChangeNotifier {
     return list.last.percentage * (amount) / 100;
   }
 
-  String  percentage(double amount) {
+  String percentage(double amount) {
     final list =
         _offers.where((element) => element.amount <= (amount)).toList();
     if (list.isEmpty) {

@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery_app/core/models/charge.dart';
 import 'package:grocery_app/core/models/master_data.dart';
-import 'package:grocery_app/core/models/option.dart';
 import 'package:grocery_app/core/models/order_product.dart';
 import 'package:grocery_app/core/models/tranzaction.dart';
 import 'package:grocery_app/enums/order_status.dart';
+import 'package:grocery_app/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../utils/dates.dart';
@@ -114,9 +114,18 @@ class Repository {
 
   Future<void> order(
       {required Map<String, dynamic> map, required Order order}) async {
+    late int number;
+    try {
+      number = await _firestore.collection('dates').doc(Dates.today.toString()).get().then((value) => value.data()!['value']);
+    } catch (e) {
+      number  = 1;
+    }
+    _firestore.collection('dates').doc(Dates.today.toString()).set({"value":number+1});
     final batch = _firestore.batch();
     final ref = _firestore.collection('orders').doc();
-    batch.set(ref, order.toMap(map: map));
+    batch.set(ref, order.copyWith(
+      orderId: Utils.dateId()+number.toString()
+    ).toMap(map: map));
     batch.update(_firestore.collection('users').doc(order.customerId), {
       'cartProducts': [],
       'walletAmount': FieldValue.increment(-order.walletAmount),

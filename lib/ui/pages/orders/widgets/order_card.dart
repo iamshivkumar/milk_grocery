@@ -28,11 +28,15 @@ class OrderCard extends StatelessWidget {
           child: Column(
             children: [
               TwoTextRow(
-                text1: "Delivery Date",
-                text2: Utils.formatedDate(order.deliveryDate),
+                text1: "Order Id",
+                text2: order.orderId,
               ),
               Divider(
                 height: 0.5,
+              ),
+              TwoTextRow(
+                text1: "Delivery Date",
+                text2: Utils.formatedDate(order.deliveryDate),
               ),
               TwoTextRow(
                 text1: "Order Status",
@@ -45,10 +49,6 @@ class OrderCard extends StatelessWidget {
               TwoTextRow(
                 text1: "Price",
                 text2: "₹" + order.price.toString(),
-              ),
-              TwoTextRow(
-                text1: "Payment (${order.paymentMethod})",
-                text2: order.paid ? "Paid" : "Not paid",
               ),
             ],
           ),
