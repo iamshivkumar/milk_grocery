@@ -48,7 +48,9 @@ class CheckoutViewModel extends ChangeNotifier {
   }) async {
     loading = true;
     final double total = price - walletAmount - extra(price - walletAmount);
-    final String? discount = extra(price - walletAmount)>0? "${Labels.rupee}${extra(price - walletAmount)} ${percentage(price - walletAmount)}":null;
+    final String? discount = extra(price - walletAmount) > 0
+        ? "${Labels.rupee}${extra(price - walletAmount)} ${percentage(price - walletAmount)}"
+        : null;
     if (total > 1) {
       final options = {
         'key': "rzp_test_KmPzyFK6pErbkC",
@@ -140,6 +142,7 @@ class CheckoutViewModel extends ChangeNotifier {
       paymentMethod: (walletAmount > 1 ? "Wallet" : "") +
           (walletAmount > 1 && total > 1 ? " + " : "") +
           (total > 1 ? "Razorpay" : ''),
+      packed: products.where((p) => !p.isMilky).isEmpty,
     );
     try {
       await repository.order(order: order, map: profile.toDeliveryAddressMap());

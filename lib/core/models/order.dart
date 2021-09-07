@@ -14,6 +14,7 @@ class Order {
   final double walletAmount;
   final double total;
   final String status;
+  final bool packed;
 
   final List<OrderProduct> products;
   final int items;
@@ -44,7 +45,8 @@ class Order {
     required this.createdOn,
     this.refundReason,
     required this.orderId,
-    this.discount
+    this.discount,
+    required this.packed,
   });
 
   Order copyWith({
@@ -64,7 +66,8 @@ class Order {
     DateTime? createdOn,
     double? total,
     String? orderId,
-    String? discount
+    String? discount,
+    bool? packed,
   }) {
     return Order(
       id: id ?? this.id,
@@ -84,6 +87,7 @@ class Order {
       total: total ?? this.total,
       orderId: orderId??this.orderId,
       discount: discount??this.discount,
+      packed: packed??this.packed,
     );
   }
 
@@ -105,7 +109,8 @@ class Order {
       'total': total,
       'address':map,
       'orderId':orderId,
-      'discount':discount
+      'discount':discount,
+      'packed':packed,
     };
   }
 
@@ -134,6 +139,7 @@ class Order {
       refundReason: map['refundReason'],
       orderId: map['orderId'],
       discount: map['discount'],
+      packed: map['packed'],
     );
   }
 }

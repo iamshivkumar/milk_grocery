@@ -26,6 +26,7 @@ class OrderProduct {
   factory OrderProduct.fromProduct(
       {required Product product, required CartProduct cartProduct}) {
     final option = product.options[cartProduct.optionIndex];
+    print(product.category == 'Milky');
     return OrderProduct(
       amount: option.amount,
       id: product.id,
