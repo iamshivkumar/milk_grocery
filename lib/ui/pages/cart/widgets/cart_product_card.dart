@@ -8,11 +8,13 @@ import '../../../../core/providers/repository_provider.dart';
 
 class CartProductCard extends StatelessWidget {
   final int qt;
+  final int index;
   final Product product;
 
   CartProductCard({
     required this.qt,
     required this.product,
+    required this.index,
   });
 
   @override
@@ -42,9 +44,9 @@ class CartProductCard extends StatelessWidget {
             ],
           ),
         ),
-        key: Key(product.id),
+        key: Key(product.id+index.toString()),
         onDismissed: (direction) {
-          profile.removeFromCart(product.id);
+          profile.removeFromCartM(product.id,index);
           reposiory.saveCart(profile.cartProducts);
         },
         child: AspectRatio(
@@ -97,8 +99,7 @@ class CartProductCard extends StatelessWidget {
                                         top: 4, left: 8, right: 8, bottom: 8),
                                     child: Text(
                                       product
-                                          .options[profile
-                                              .cartOptionIndex(product.id)]
+                                          .options[index]
                                           .amountLabel,
                                       style: TextStyle(
                                           fontSize: 12, color: Colors.grey),
@@ -108,8 +109,7 @@ class CartProductCard extends StatelessWidget {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
                                       product
-                                          .options[profile
-                                              .cartOptionIndex(product.id)]
+                                          .options[index]
                                           .salePriceLabel,
                                       style: TextStyle(
                                           fontSize: 16,
@@ -123,8 +123,7 @@ class CartProductCard extends StatelessWidget {
                             Expanded(
                               flex: 7,
                               child: product
-                                          .options[profile
-                                              .cartOptionIndex(product.id)].quantity > 0
+                                          .options[index].quantity > 0
                                   ? Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -139,8 +138,8 @@ class CartProductCard extends StatelessWidget {
                                           icon:
                                               Icon(Icons.remove_circle_outline),
                                           onPressed: () {
-                                            profile.updateCartQuantity(
-                                                product.id, -1);
+                                            profile.updateCartQuantityM(
+                                                product.id, -1,index);
                                             reposiory
                                                 .saveCart(profile.cartProducts);
                                           },
@@ -160,11 +159,10 @@ class CartProductCard extends StatelessWidget {
                                           highlightColor: Colors.transparent,
                                           icon: Icon(Icons.add_circle_outline),
                                           onPressed: product
-                                          .options[profile
-                                              .cartOptionIndex(product.id)].quantity > qt
+                                          .options[index].quantity > qt
                                               ? () {
-                                                  profile.updateCartQuantity(
-                                                      product.id, 1);
+                                                  profile.updateCartQuantityM(
+                                                      product.id, 1,index);
                                                   reposiory.saveCart(
                                                       profile.cartProducts);
                                                 }

@@ -15,9 +15,11 @@ class ProductCard extends ConsumerWidget {
     final style = theme.textTheme;
     final profile = watch(profileProvider).data!.value;
     final repository = context.read(repositoryProvider);
-    final option = profile.isInCart(product.id)
-        ? product.options[profile.cartOptionIndex(product.id)]
-        : product.options.where((element) => element.quantity>0).first;
+    final option = profile.isInCartO(product.id)
+        ? (product.options[profile.cartOptionIndex(product.id)])
+        : product.options.where((element) => element.quantity > 0).isNotEmpty
+            ? product.options.where((element) => element.quantity > 0).first
+            : product.options.first;
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -81,32 +83,37 @@ class ProductCard extends ConsumerWidget {
             SizedBox(
               height: 40,
               child: option.quantity > 0
-                  ? (profile.isInCart(product.id)
+                  ? (profile.isInCartO(product.id)
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton(
                               onPressed: () {
-                                profile.updateCartQuantity(product.id, -1);
+                                profile.updateCartQuantityM(product.id, -1,product.options.indexOf(option));
                                 repository.saveCart(profile.cartProducts);
                               },
                               child: Icon(Icons.remove_circle_outline),
                             ),
                             Text(
-                              profile.cartQuanity(product.id).toString(),
+                              profile.cartQuanityM(product.id,product.options.indexOf(option)).toString(),
                             ),
                             TextButton(
-                              onPressed: option.quantity>profile.cartQuanity(product.id)? () {
-                                profile.updateCartQuantity(product.id, 1);
-                                repository.saveCart(profile.cartProducts);
-                              }:null,
+                              onPressed: option.quantity >
+                                      profile.cartQuanity(product.id)
+                                  ? () {
+                                      profile.updateCartQuantityM(product.id, 1,product.options.indexOf(option));
+                                      repository.saveCart(profile.cartProducts);
+                                    }
+                                  : null,
                               child: Icon(Icons.add_circle_outline),
                             ),
                           ],
                         )
                       : TextButton(
                           onPressed: () async {
-                            profile.addToCart(id: product.id,index: product.options.indexOf(option));
+                            profile.addToCart(
+                                id: product.id,
+                                index: product.options.indexOf(option));
                             repository.saveCart(profile.cartProducts);
                           },
                           child: Icon(

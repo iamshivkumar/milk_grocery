@@ -1,0 +1,29 @@
+{
+    "active": true,
+    "category": "Milky",
+    "description":"...",
+    "images": [
+        "...",
+        "..."
+    ],
+    "name":"Amul Milk",
+    "options": [
+        {
+            "amount": "2",
+            "barcode": "111222",
+            "location":"...",
+            "price": 100.0,
+            "salePrice": 80.0,
+            "unit": "Litre"
+        },
+        {
+            "amount": "2",
+            "barcode": "111222",
+            "location":"...",
+            "price": 100.0,
+            "salePrice": 80.0,
+            "unit": "Litre"
+        }
+    ],
+    "popular":true
+}

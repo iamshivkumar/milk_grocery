@@ -9,6 +9,8 @@ import '../../widgets/selection_tile.dart';
 import '../subscribe/subscribe_page.dart';
 import 'widgets/product_image_viewer.dart';
 
+final indexProvider  = StateProvider.autoDispose<int>((ref)=>0);
+
 class ProductPage extends ConsumerWidget {
   final Product product;
 
@@ -17,12 +19,13 @@ class ProductPage extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
+        final index = watch(indexProvider);
 
     final profile = watch(profileProvider).data!.value;
     final repository = context.read(repositoryProvider);
-    final option = profile.isInCart(product.id)
+    final option = profile.isInCart(product.id,index.state)
         ? product.options[profile.cartOptionIndex(product.id)]
-        : product.options.where((element) => element.quantity > 0).first;
+        : product.options.where((element) => element.quantity > 0).isNotEmpty?product.options.where((element) => element.quantity > 0).first:product.options.first;
     return Scaffold(
       appBar: AppBar(
         title: Text(product.name),
@@ -31,30 +34,30 @@ class ProductPage extends ConsumerWidget {
         color: theme.cardColor,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-          child: option.quantity > 0
-              ? (profile.isInCart(product.id)
+          child: product.options[index.state].quantity>0
+              ? (profile.isInCart(product.id,index.state)
                   ? Row(
                       children: [
                         Text(
-                          "${Labels.rupee}${product.options[profile.cartOptionIndex(product.id)].salePrice.toInt() * profile.cartQuanity(product.id)}",
+                          "${Labels.rupee}${product.options[index.state].salePrice.toInt() * profile.cartQuanityM(product.id,index.state)}",
                           style: style.headline6,
                         ),
                         Spacer(),
                         IconButton(
                           onPressed: () {
-                            profile.updateCartQuantity(product.id, -1);
+                            profile.updateCartQuantityM(product.id, -1,index.state);
                             repository.saveCart(profile.cartProducts);
                           },
                           icon: Icon(Icons.remove),
                         ),
                         SizedBox(width: 16),
-                        Text(profile.cartQuanity(product.id).toString()),
+                        Text(profile.cartQuanityM(product.id,index.state).toString()),
                         SizedBox(width: 16),
                         IconButton(
                           onPressed:
-                              profile.cartQuanity(product.id) < option.quantity
+                              profile.cartQuanityM(product.id,index.state) < option.quantity
                                   ? () {
-                                      profile.updateCartQuantity(product.id, 1);
+                                      profile.updateCartQuantityM(product.id, 1,index.state);
                                       repository.saveCart(profile.cartProducts);
                                     }
                                   : null,
@@ -89,7 +92,7 @@ class ProductPage extends ConsumerWidget {
                             onPressed: () {
                               profile.addToCart(
                                   id: product.id,
-                                  index: product.options.indexOf(option));
+                                  index: index.state);
                               repository.saveCart(profile.cartProducts);
                             },
                             color: theme.accentColor,
@@ -139,28 +142,14 @@ class ProductPage extends ConsumerWidget {
                   child: Column(
                     children: product.options.map(
                       (e) {
-                        final value = profile.isInCart(product.id) &&
-                            profile.cartOptionIndex(product.id) ==
-                                product.options.indexOf(e);
+                        final value = product.options.indexOf(e) == index.state;
                         return Material(
                           color: value ? theme.primaryColorLight : null,
                           child: SelectionTile(
                             value: value,
                             active: e.quantity > 0,
                             onTap: () {
-                              if (!profile.isInCart(product.id)) {
-                                profile.addToCart(
-                                  id: product.id,
-                                  index: product.options.indexOf(e),
-                                );
-                              } else if (!value) {
-                                profile.updateIndex(
-                                  id: product.id,
-                                  quantity: e.quantity,
-                                  index: product.options.indexOf(e),
-                                );
-                              }
-                              repository.saveCart(profile.cartProducts);
+                              index.state = product.options.indexOf(e);
                             },
                             title: Text(
                               e.salePriceLabel,

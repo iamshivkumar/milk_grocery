@@ -27,20 +27,35 @@ class CartPage extends ConsumerWidget {
         });
       },
     );
+    if(products.length!=profile.cartProducts.length){
+      return Scaffold(
+        appBar: AppBar(
+        title: Text("My Cart"),
+      ),
+      );
+    }
 
     final int items = profile.cartProducts.isNotEmpty
         ? profile.cartProducts.map((e) =>e.qt>0?e.qt:0).reduce((value, element) => value + element)
         : 0;
-
-    final double total = products.isNotEmpty
-        ? products
+    final double total = profile.cartProducts.isNotEmpty
+        ? profile.cartProducts
             .map(
               (e) =>
-                  e.options[profile.cartOptionIndex(e.id)].salePrice *
-                  (profile.cartQuanity(e.id)>0?profile.cartQuanity(e.id):0),
+                  products.where((element) => element.id==e.id).first.options[e.optionIndex].salePrice *
+                  e.qt,
             )
             .reduce((value, element) => value + element)
         : 0;
+    // final double total = products.isNotEmpty
+    //     ? products
+    //         .map(
+    //           (e) =>
+    //               e.options[profile.cartOptionIndex(e.id)].salePrice *
+    //               (profile.cartQuanity(e.id)>0?profile.cartQuanity(e.id):0),
+    //         )
+    //         .reduce((value, element) => value + element)
+    //     : 0;
     return Scaffold(
       appBar: AppBar(
         title: Text("My Cart"),
@@ -68,11 +83,11 @@ class CartPage extends ConsumerWidget {
                         builder: (context) => CheckoutPage(
                           total: total,
                           items: items,
-                          orderProducts: products.where((element) => element.options[profile.cartProduct(element.id).optionIndex].quantity!=0)
+                          orderProducts: profile.cartProducts
                               .map(
                                 (e) => OrderProduct.fromProduct(
-                                  product: e,
-                                  cartProduct: profile.cartProduct(e.id),
+                                  product: products.where((element) => element.id==e.id).first,
+                                  cartProduct: e,
                                 ),
                               )
                               .toList(),
@@ -86,12 +101,13 @@ class CartPage extends ConsumerWidget {
           ),
         ),
       ),
-      body: ListView(
-        children: products
+      body:  ListView(
+        children: profile.cartProducts
             .map(
               (e) => CartProductCard(
-                product: e,
-                qt: profile.cartQuanity(e.id),
+                product: products.where((s) => s.id==e.id).first,
+                qt: e.qt,
+                index: e.optionIndex,
               ),
             )
             .toList(),

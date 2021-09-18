@@ -38,8 +38,6 @@ class Profile {
     };
   }
 
-
-
   bool get ready => area != null && number != null && milkManId != null;
 
   Profile copyWith({
@@ -75,14 +73,13 @@ class Profile {
     };
   }
 
-    Map<String, dynamic> toDeliveryAddressMap() {
+  Map<String, dynamic> toDeliveryAddressMap() {
     return {
       'area': area,
       'number': number,
       'landMark': landMark,
     };
   }
-
 
   factory Profile.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
@@ -108,10 +105,16 @@ class Profile {
         walletAmount: 0,
       );
 
-  bool isInCart(String id) =>
+  bool isInCart(String id, int index) => cartProducts
+      .where((element) => element.id == id && element.optionIndex == index)
+      .isNotEmpty;
+  bool isInCartO(String id) =>
       cartProducts.where((element) => element.id == id).isNotEmpty;
-
   int cartQuanity(String id) => cartProduct(id).qt;
+  int cartQuanityM(String id, int index) => cartProducts
+      .where((element) => element.id == id && element.optionIndex == index)
+      .first
+      .qt;
 
   int cartOptionIndex(String id) => cartProduct(id).optionIndex;
 
@@ -124,9 +127,10 @@ class Profile {
   CartProduct cartProduct(String id) =>
       cartProducts.where((element) => element.id == id).first;
 
-  void updateIndex({required String id, required int index, required int quantity}) {
+  void updateIndex(
+      {required String id, required int index, required int quantity}) {
     cartProducts.where((element) => element.id == id).first.optionIndex = index;
-    if(cartProducts.where((element) => element.id == id).first.qt>quantity){
+    if (cartProducts.where((element) => element.id == id).first.qt > quantity) {
       cartProducts.where((element) => element.id == id).first.qt = quantity;
     }
   }
@@ -139,7 +143,25 @@ class Profile {
     }
   }
 
+  void updateCartQuantityM(String id, int qt, int index) {
+    if (cartProducts.where(
+          (element) => element.id == id && element.optionIndex == index).first.qt == 1 && qt == -1) {
+      cartProducts.removeWhere(
+          (element) => element.id == id && element.optionIndex == index);
+    } else {
+      cartProducts
+          .where((element) => element.id == id && element.optionIndex == index)
+          .first
+          .qt += qt;
+    }
+  }
+
   void removeFromCart(String id) {
     cartProducts.removeWhere((element) => element.id == id);
+  }
+
+  void removeFromCartM(String id, int index) {
+    cartProducts.removeWhere(
+        (element) => element.id == id && element.optionIndex == index);
   }
 }
