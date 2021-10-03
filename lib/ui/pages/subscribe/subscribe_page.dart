@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:grocery_app/core/providers/profile_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/models/product.dart';
@@ -22,6 +23,7 @@ class SubscribePage extends HookWidget {
     final style = theme.textTheme;
     final model = useProvider(subscribeViewModelProvider);
     final _controller = useTextEditingController();
+    final _profile = context.read(profileProvider).data!.value;
     return Scaffold(
       backgroundColor: theme.cardColor,
       appBar: AppBar(
@@ -29,26 +31,37 @@ class SubscribePage extends HookWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: model.loading
-            ? Loading()
-            : MaterialButton(
-                color: theme.accentColor,
-                onPressed: model.ready
-                    ? () {
-                        model.subscribe(
-                            product: product,
-                            onSubscribe: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DeliverySchedulesPage(),
-                                ),
-                              );
-                            });
-                      }
-                    : null,
-                child: Text("CONFIRM"),
-              ),
+        child: _profile.walletAmount > 100
+            ? (model.loading
+                ? Loading()
+                : MaterialButton(
+                    color: theme.accentColor,
+                    onPressed: model.ready
+                        ? () {
+                            model.subscribe(
+                                product: product,
+                                onSubscribe: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DeliverySchedulesPage(),
+                                    ),
+                                  );
+                                });
+                          }
+                        : null,
+                    child: Text("CONFIRM"),
+                  ))
+            : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                  "Minimum wallet amount should be ${Labels.rupee}100. Add wallet amount to subscribe.",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+            ),
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
