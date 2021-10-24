@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:grocery_app/ui/pages/home/providers/initializer.dart';
 import 'providers/banners_provider.dart';
 import 'providers/categories_provider.dart';
 import 'providers/popular_products_provider.dart';
@@ -16,6 +17,7 @@ import 'widgets/my_drawer.dart';
 class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final _ = watch(initializer(context));
     final categoriesAsync = watch(categoriesProvider);
     final popularProductsAsync = watch(popularProductsProvider);
     final bannersAsync = watch(bannersProvider);

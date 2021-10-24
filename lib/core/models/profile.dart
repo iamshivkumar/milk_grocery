@@ -12,7 +12,7 @@ class Profile {
   final String? milkManId;
   final List<CartProduct> cartProducts;
   final double walletAmount;
-
+  final String? token;
   Profile({
     required this.id,
     required this.name,
@@ -23,6 +23,7 @@ class Profile {
     required this.cartProducts,
     required this.walletAmount,
     this.landMark,
+    this.token,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +36,7 @@ class Profile {
       'cartProducts': cartProducts.map((x) => x.toMap()).toList(),
       'walletAmount': walletAmount,
       'landMark': landMark,
+      'token':token,
     };
   }
 
@@ -61,6 +63,7 @@ class Profile {
       cartProducts: cartProducts ?? this.cartProducts,
       walletAmount: walletAmount ?? this.walletAmount,
       landMark: landMark ?? this.landMark,
+      token: token,
     );
   }
 

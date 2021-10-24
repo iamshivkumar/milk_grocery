@@ -16,7 +16,7 @@ dependencies:
   carousel_slider: ^4.0.0
   table_calendar: ^3.0.1
   flutter_svg: ^0.22.0
-
+  fluttertoast: ^8.0.8
   #state management
   hooks_riverpod: ^0.14.0+4
   equatable: ^2.0.3

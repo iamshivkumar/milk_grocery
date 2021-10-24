@@ -112,7 +112,7 @@ class ProductSearch extends SearchDelegate {
                 ? []
                 : keys
                     .where((element) =>
-                        element.toLowerCase().startsWith(query.toLowerCase()))
+                        element.toLowerCase().contains(query.toLowerCase()))
                     .toList();
             return ListView.builder(
               itemBuilder: (context, index) => ListTile(

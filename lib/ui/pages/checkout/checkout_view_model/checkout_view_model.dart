@@ -53,7 +53,8 @@ class CheckoutViewModel extends ChangeNotifier {
         : null;
     if (total > 1) {
       final options = {
-        'key': 'rzp_live_r1jNNeskW19IU5',
+        // 'key': 'rzp_live_r1jNNeskW19IU5',
+        'key': "rzp_test_KmPzyFK6pErbkC", 
         'amount': (total * 100).toInt(),
         'name': 'Kisan Nest',
         'description': 'Pay For Checkout',

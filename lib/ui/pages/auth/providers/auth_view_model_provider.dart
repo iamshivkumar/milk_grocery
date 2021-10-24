@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../enums/phone_auth_mode.dart';
 
@@ -46,15 +46,15 @@ class AuthViewModel extends ChangeNotifier {
           user = (await _auth.signInWithCredential(credential)).user;
           notifyListeners();
           onVerify();
-          // Fluttertoast.showToast(msg: "Sign in successful");
+          Fluttertoast.showToast(msg: "Sign in successful");
         },
         verificationFailed: (FirebaseAuthException e) {
           if (e.code == 'invalid-phone-number') {
-            // Fluttertoast.showToast(
-            //   msg: "The provided phone number is not valid.",
-            // );
+            Fluttertoast.showToast(
+              msg: "The provided phone number is not valid.",
+            );
           } else
-            // Fluttertoast.showToast(msg: e.code);
+            Fluttertoast.showToast(msg: e.code);
             loading = false;
         },
         timeout: const Duration(seconds: 0),
@@ -83,7 +83,11 @@ class AuthViewModel extends ChangeNotifier {
 
       user = (await _auth.signInWithCredential(credential)).user;
 
-      // Fluttertoast.showToast(msg: "Sign in successful");
+      Fluttertoast.showToast(msg: "Sign in successful");
+      try {
+        
+      } catch (e) {
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {}
     } catch (e) {

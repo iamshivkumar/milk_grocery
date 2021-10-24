@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:grocery_app/core/models/charge.dart';
 import 'package:grocery_app/core/models/master_data.dart';
 import 'package:grocery_app/core/models/order_product.dart';
@@ -38,7 +39,8 @@ class Repository {
     );
   }
 
-  void createUser(String name) {
+  void createUser(String name) async {
+    String? token = await FirebaseMessaging.instance.getToken();
     _firestore.collection("users").doc(user.uid).set(
           Profile(
             id: '',
@@ -46,8 +48,20 @@ class Repository {
             mobile: user.phoneNumber!,
             name: name,
             walletAmount: 0,
+            token: token,
           ).toMap(),
         );
+  }
+
+  void updateToken() async {
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      _firestore.collection("users").doc(user.uid).update({
+        'token': token,
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void addDeliveryAddress(Profile profile) {
@@ -383,5 +397,4 @@ class Repository {
       _firestore.collection('masterData').doc('masterData_v1').snapshots().map(
             (event) => Masterdata.fromMap(event),
           );
-
 }

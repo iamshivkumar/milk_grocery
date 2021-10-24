@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/core/providers/repository_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
@@ -109,6 +110,7 @@ class SignInSheet extends ConsumerWidget {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
                                 await authModel.verifyOTP();
+                                context.read(repositoryProvider).updateToken();
                                 Navigator.pop(context);
                               }
                             },
