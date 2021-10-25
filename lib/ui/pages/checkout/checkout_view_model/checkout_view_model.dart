@@ -51,10 +51,11 @@ class CheckoutViewModel extends ChangeNotifier {
     final String? discount = extra(price - walletAmount) > 0
         ? "${Labels.rupee}${extra(price - walletAmount)} ${percentage(price - walletAmount)}"
         : null;
+                // 'key': "rzp_test_KmPzyFK6pErbkC", 
+
     if (total > 1) {
       final options = {
-        // 'key': 'rzp_live_r1jNNeskW19IU5',
-        'key': "rzp_test_KmPzyFK6pErbkC", 
+        'key': 'rzp_live_r1jNNeskW19IU5',
         'amount': (total * 100).toInt(),
         'name': 'Kisan Nest',
         'description': 'Pay For Checkout',
